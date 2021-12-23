@@ -1,0 +1,87 @@
+<div class="container-fluid">
+
+    <!-- start page title -->
+    <div class="row">
+        <div class="col-12">
+            <div class="page-title-box">
+                <h4 class="page-title">Sửa đổi khách hàng</h4>
+            </div>
+        </div>
+    </div>
+    <!-- end page title -->
+
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row mb-2">
+
+                        
+                        <form id="formEditCustomer" method="post" action="/customers/{{editCustomer._id}}?_method=PUT">
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Tên</label>
+                            <input type="text" value="{{editCustomer.name}}" id="name" class="form-control" name="name">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="phone" class="form-label">Số điện thoại</label>
+                            <input type="numeric" value="{{editCustomer.phone}}" id="phone" name="phone" class="form-control"
+                                placeholder="0123456789">
+                        </div>
+                        <div class="mb-3">
+                            <label for="address" class="form-label">Địa chỉ</label>
+                            <input type="text" value="{{editCustomer.address}}" id="address" name="address" class="form-control"
+                                placeholder="hcm">
+                        </div>
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" value="{{editCustomer.email}}" id="email" name="email" class="form-control"
+                                placeholder="abcd@gmail.com">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Thay đổi</button>
+                        </form>
+                    </div>
+                </div> <!-- end card-body-->
+            </div> <!-- end card-->
+        </div> <!-- end col -->
+    </div>
+    <!-- end row -->
+
+</div> <!-- container -->
+
+<script>
+    $('#formEditCustomer').submit(function (e){
+        var isSubmit = false;
+        var ajaxCall = $.ajax({
+            url : `http://localhost:3000/api/customerUpdateValid/{{editCustomer._id}}`,
+            type : "post",
+            dataType:"json",
+            data : { 
+                name : $('#name').val(),
+                address : $('#address').val(),
+                phone : $('#phone').val(),
+                email : $('#email').val()
+            },
+            success : function (result){
+                if(result.errors.length == 0){                   
+                    isSubmit = true;    
+                    return true;         
+                }
+                alert(result.errors[0].msg);
+                isSubmit = false;  
+                return false;       
+            },
+            error: function(xhr, status, error){
+                alert("Result: " + status + " " + error + " " + xhr.status + " " + xhr.statusText);
+                isSubmit = false;
+                return false;
+            }
+        });
+        ajaxCall.done(function(data) {           
+            if (isSubmit){
+                $('#formEditCustomer').submit();       
+            }
+        }); 
+        return false;   
+    });
+</script>

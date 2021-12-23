@@ -1,0 +1,585 @@
+<style>
+    .awesomplete>ul {
+        border-radius: .3em;
+        margin: .2em 0 0;
+        background: hsla(0, 0%, 100%, .9);
+        background: linear-gradient(to bottom right, white, hsla(0, 0%, 100%, .8));
+        border: 1px solid rgba(0, 0, 0, .3);
+        box-shadow: .05em .2em .6em rgba(0, 0, 0, .2);
+        text-shadow: none;
+    }
+
+    @supports (transform: scale(0)) {
+        .awesomplete>ul {
+            transition: .3s cubic-bezier(.4, .2, .5, 1.4);
+            transform-origin: 1.43em -.43em;
+        }
+
+        .awesomplete>ul[hidden],
+        .awesomplete>ul:empty {
+            opacity: 0;
+            transform: scale(0);
+            display: block;
+            transition-timing-function: ease;
+        }
+    }
+
+    @keyframes animate {
+        0% {
+            background-position: left;
+        }
+
+        50% {
+            background-position: right;
+        }
+
+        100% {
+            background-position: right;
+        }
+    }
+
+
+
+    /* Pointer */
+
+    .awesomplete>ul:before {
+        content: "";
+        position: absolute;
+        top: -.43em;
+        left: 1em;
+        width: 0;
+        height: 0;
+        padding: .4em;
+        background: white;
+        border: inherit;
+        border-right: 0;
+        border-bottom: 0;
+        -webkit-transform: rotate(45deg);
+        transform: rotate(45deg);
+    }
+
+    .awesomplete>ul>li {
+        position: relative;
+        padding: .2em .5em;
+        cursor: pointer;
+    }
+
+    .awesomplete>ul>li:hover {
+        background: hsl(200, 40%, 80%);
+        color: black;
+    }
+
+    .awesomplete>ul>li[aria-selected="true"] {
+        background: hsl(205, 40%, 40%);
+        color: white;
+    }
+
+    .awesomplete mark {
+        background: hsl(65, 100%, 50%);
+    }
+
+    .awesomplete li:hover mark {
+        background: hsl(68, 100%, 41%);
+    }
+
+    .awesomplete li[aria-selected="true"] mark {
+        background: hsl(86, 100%, 21%);
+        color: inherit;
+    }
+
+    .shopping-cart {
+        width: 750px;
+        height: auto;
+        margin: 80px auto;
+        background: #FFFFFF;
+        box-shadow: 1px 2px 3px 0px rgba(0, 0, 0, 0.10);
+        border-radius: 6px;
+
+        display: flex;
+        flex-direction: column;
+    }
+
+    .item {
+        padding: 20px 30px;
+        height: 120px;
+        display: flex;
+        border-bottom: solid;
+        background-color: #eef2f7;
+    }
+
+    .delete-btn {
+        width: 18px;
+        height: 17px;
+        background: url(&amp;quot;delete-icn.svg&amp;quot;) no-repeat center;
+        display: inline-block;
+        Cursor: pointer;
+    }
+
+    .is-active {
+        animation-name: animate;
+        animation-duration: .8s;
+        animation-iteration-count: 1;
+        animation-timing-function: steps(28);
+        animation-fill-mode: forwards;
+    }
+
+
+    .image {
+        margin-right: 50px;
+    }
+
+    .image img {
+        width: 50%;
+    }
+
+    .image,
+    .description {
+        width: 100%;
+        text-align: center;
+        margin: 6px 0;
+    }
+
+    .minus-btn img {
+        margin-bottom: 3px;
+    }
+
+    .plus-btn img {
+        margin-top: 2px;
+    }
+
+
+
+    input:focus {
+        outline: 0;
+    }
+
+    .total-price {
+        width: 83px;
+        padding-top: 27px;
+        text-align: center;
+        font-size: 16px;
+        color: #43484D;
+        font-weight: 300;
+    }
+
+    .description {
+        padding-top: 10px;
+        margin-right: 60px;
+        width: 300px;
+    }
+
+    .hvr:hover {
+        background-color: rgba(255, 99, 71, 0.10);
+    }
+</style>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<form action="/orders" method="GET" id="get_orders"></form>
+<div class="row mt-2">
+    <div class="col-xl-5">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="header-title">Giỏ hàng</h4>
+                <div class="row " style="background-color: #e0e4ea; font-weight: 600; color:black">
+                    <div class="col-4 ">Sản phẩm</div>
+                    <div class="col-3 ">Đơn giá</div>
+                    <div class="col-2 ">Số lượng</div>
+                    <div class="col-3 ">Thành tiền</div>
+
+                </div>
+                <ul class="list-group list-group-flush list-group-numbered" id="cart">
+                </ul>
+
+            </div> <!-- end card-body -->
+        </div> <!-- end card-->
+        <div class="card">
+            <div class="card-body">
+                <p>Khách hàng: <input id="my-input" class="awesomplete" list="mylist" /></p>
+                <datalist id="mylist">
+                    {{#each customer}}
+                    <option id="{{this._id}}" value="{{this.name}}"></option>
+                    {{/each}}
+                </datalist>
+                <p>Số lượng: <span id="totalQuantity" style="float: right;">0</span></p>
+                <p>Tổng tiền : <span id="totalCart" style="float: right;">0</span></p>
+                <p>Giảm giá: <span id="totalDiscount" style="float: right;">0</span></p>
+                <p>Tiền thanh toán: <span id="totalPayment" style="float: right;">0</span></p>
+                <button id="orderandpay" class="btn btn-danger m-1" style="float: right;">Thanh toán</button>           
+            </div>
+        </div>
+    </div> <!-- end col -->
+
+    <div class="col-7" id="list-product">
+        <div class="card">
+            <div class="row">
+                <div class="col-sm-9">
+                    <div class="tab-content" id="v-pills-tabContent-right">
+                        {{#each data}}
+                        <div class="tab-pane fade" id="v-pills-{{@index}}" role="tabpanel"
+                            aria-labelledby="v-pills-{{@index}}">
+                            <div data-simplebar="" style="max-height: 700px;">
+                                {{#each this.items}}
+                                <div class="col-4 ">
+                                    <!-- Simple card -->
+                                    <a class="item-product" href="javascript:void(0)" style="color: #6C757D;"
+                                        data-id="{{this._id}}" 
+                                        data-name="{{this.Name}}" 
+                                        data-dvt="{{this.dvt}}"
+                                        data-price="{{this.Price}}"
+                                        data-quantity="{{this.Quantity}}">
+                                        <div class="card d-block hvr">
+                                            <img class="card-img-top" src="assets/uploads/{{this.Image}}"
+                                                alt="Card image cap"
+                                                style="height: 100px; object-fit: scale-down;">                                                                                                                                                    
+                                            <div class="card-body p-1">
+                                                <h5 class="card-title m-0 p-0">{{this.Name}}</h5>
+                                                <p class="card-text m-0 p-0">Đơn giá: {{this.Price}}</p>
+                                                <p class="card-text m-0 p-0">Đơn vị tính: {{this.dvt}}</p>
+                                                <p class="card-text m-0 p-0">Số lượng: {{this.Quantity}}</p>
+                                            </div> <!-- end card-body-->
+                                        </div> <!-- end card-->
+                                    </a>
+                                </div>
+                                {{/each}}
+                            </div>
+                        </div>
+                        {{/each}}
+                    </div> <!-- end tabcontent-->
+                </div> <!-- end col-->
+
+                <div class="col-sm-3 mt-2 mt-sm-0" style="border-left: black solid 1px ;">
+                    <div class="nav flex-column nav-pills" id="v-pills-tab2" role="tablist" aria-orientation="vertical">
+                        {{#each data}}
+                        <a class="nav-link" id="v-pills-home-tab2" data-bs-toggle="pill" href="#v-pills-{{@index}}"
+                            role="tab" aria-controls="v-pills-{{@index}}" aria-selected="true">
+                            <i class="mdi mdi-home-variant d-md-none d-block"></i>
+                            <span class="d-none d-md-block">{{this.category}}</span>
+                        </a>
+                        {{/each}}
+                    </div>
+                </div> <!-- end col-->
+            </div> <!-- end row-->
+        </div>
+    </div>
+</div>
+
+
+<script> //load scrollbar
+    $(document).ready(function () {
+        var input = document.getElementById("my-input");
+        var awesomplete = new Awesomplete(input, {
+            minChars: 1,
+            list: "#mylist",
+        });
+    });
+    var test;
+    var btnDels;
+    var data = [];
+    var totalCart;
+    var totalQuantity;
+    var totalDiscount;
+    var totalPayment;
+    var name_customer;
+    function remove(i) {
+        data.splice(i, 1);
+        renderItems();
+    }
+
+    function renderItems() {
+
+        totalCart = 0;
+        totalQuantity = 0;
+        totalDiscount = 0;
+        totalPayment = 0;
+
+        for (let i = 0; i < data.length; i++) {
+            data[i].total = data[i].unitprice * data[i].quantity;
+            data[i].totalEND = data[i].total - (data[i].discount * data[i].quantity);
+         
+            totalCart = parseInt(totalCart) + parseInt(data[i].total);
+            totalQuantity = parseInt(totalQuantity) + parseInt(data[i].quantity);
+            totalDiscount += data[i].discount * data[i].quantity;
+            totalPayment += data[i].totalEND;
+        }
+
+        $('#totalCart').text(ParseVND(totalCart));
+        $('#totalQuantity').text(totalQuantity);
+        $('#totalDiscount').text(ParseVND(totalDiscount));
+        $('#totalPayment').text(ParseVND(totalPayment));
+
+
+        var HTML = data.map(item =>{ 
+            var totalEND_Parse = ParseVND(item.totalEND);
+            var unitprice_Parse = ParseVND(item.unitprice);
+            return `<li class="list-group-item p-0">                                                         
+                                        <div class=" row">
+                                            <div class="col-4">           
+                                                <p class="m-0 d-inline-block align-middle font-14">
+                                                    <span class="text-body">${item.name}</span>
+                                                    <br>
+                                                    <small class="me-2">Đơn vị tính: ${item.dvt} </small>
+                                                    <br>
+                                                    <small class="discount-text text-danger"></small>
+                                                    <br>
+                                                    <small class="me-2" data-bs-toggle="collapse" href="#discount-${item.id}" role="button" aria-expanded="false" aria-controls="discount-${item.id}">
+                                                        Giảm giá <i class="uil uil-angle-down font-18"></i> 
+                                                    </small>
+                                                </p>
+                                            </div>
+                                            <div class="col-3">
+                                                <span> ${unitprice_Parse}</span>
+                                            </div>
+                                            <div class="col-2">
+                                                <input type="number" min="1" value="${item.quantity}" class="form-control quantity" style="width: 70px;">
+                                            </div>
+                                            <div class="col-3">
+                                                <span>${totalEND_Parse} <a href="javascript:void(0);" class="action-icon btn-del"> <i class="mdi mdi-delete"></i></a></span>  
+                                            </div>                               
+                                        </div>
+                                       
+                                        <div class="collapse" id="discount-${item.id}">
+                                            <div class="card mb-0">
+                                                <div class="card-body">
+                                                    <div class="row">
+                                                        <div class="col-4">
+                                                          <div class="list-group" id="list-tab" role="tablist">
+                                                            <a class="list-group-item list-group-item-action active" id="list-number-list" data-bs-toggle="list" href="#list-number-${item.id}" role="tab" aria-controls="list-number">Giá</a>
+                                                            <a class="list-group-item list-group-item-action" id="list-percent-list" data-bs-toggle="list" href="#list-percent-${item.id}" role="tab" aria-controls="list-percent">Phần trăm</a>                    
+                                                          </div>
+                                                        </div>
+                                                        <div class="col-8">
+                                                          <div class="tab-content" id="nav-tabContent">
+                                                            <div class="tab-pane fade show active" id="list-number-${item.id}" role="tabpanel" aria-labelledby="list-number-list">
+                                                                <div class="row">
+                                                                    <div class="col-6">
+                                                                        Nhập giá tiền giảm
+                                                                        <input type="number" value="0" class="form-control input-discount-number" style="width: 110px;">
+                                                                    </div>
+                                                                    <div class="col-6">
+                                                                        <button type="button" class="btn btn-info btn-discount-number">Áp dụng</button>
+                                                                    </div>                                                     
+                                                                </div>
+                                                            </div>
+                                                            <div class="tab-pane fade" id="list-percent-${item.id}" role="tabpanel" aria-labelledby="list-percent-list">
+                                                                <div class="row">
+                                                                    <div class="col-6">
+                                                                        Nhập % giảm
+                                                                        <input type="number" value="0" class="form-control input-discount-percent" style="width: 110px;">
+                                                                    </div>
+                                                                    <div class="col-6">
+                                                                        <button type="button" class="btn btn-info btn-discount-percent">Áp dụng</button>
+                                                                    </div>                                                     
+                                                                </div>
+                                                            </div>                                                       
+                                                          </div>
+                                                        </div>
+                                                      </div>                                              
+                                                </div> 
+                                            </div>
+                                        </div>                             
+                                </li>` }).join('');
+        $('#cart').empty();
+        $('#cart').append(HTML);
+
+
+
+
+        btnDels = $('.btn-del');
+        for (let i = 0; i < btnDels.length; i++) {
+            btnDels[i].addEventListener('click', function () {
+                console.log(data);
+                remove(i);
+            });
+        }
+
+        inputQuantitys = $('.quantity');
+        for (let i = 0; i < inputQuantitys.length; i++) {
+            inputQuantitys[i].addEventListener('change', e => {
+                if (inputQuantitys[i].value < 1){
+                    inputQuantitys[i].value = 1;
+                }
+                if (inputQuantitys[i].value > data[i].quantityOfWarehouse){
+                    inputQuantitys[i].value = data[i].quantityOfWarehouse;
+                }
+                data[i].quantity = inputQuantitys[i].value;
+                renderItems();
+            })
+        }
+
+        inputUnitPrices = $('.unitprice');
+        for (let i = 0; i < inputUnitPrices.length; i++) {
+            inputUnitPrices[i].addEventListener('change', e => {
+                data[i].unitprice = inputUnitPrices[i].value;
+                renderItems();
+            })
+        }
+        //discount 
+        var input_discount_numbers = $('.input-discount-number');
+        for (let i = 0; i < input_discount_numbers.length; i++){
+            input_discount_numbers[i].addEventListener('change', e=>{
+                if (input_discount_numbers[i].value < 0){
+                    input_discount_numbers[i].value = 0;
+                }
+                if (input_discount_numbers[i].value > data[i].unitprice){
+                    input_discount_numbers[i].value = data[i].unitprice;
+                }
+            });
+        }
+
+        var input_discount_percents = $('.input-discount-percent');
+        for (let i = 0; i < input_discount_percents.length; i++){
+            input_discount_percents[i].addEventListener('change', e=>{
+                if (input_discount_percents[i].value < 0){
+                    input_discount_percents[i].value = 0;
+                }
+                if (input_discount_percents[i].value > 100){
+                    input_discount_percents[i].value = 100;
+                }
+            });
+        }
+
+        var btn_discount_numbers = $('.btn-discount-number');
+        for (let i = 0; i < btn_discount_numbers.length; i++){
+            btn_discount_numbers[i].addEventListener('click', e=>{
+                data[i].discount = parseInt(input_discount_numbers[i].value);
+                renderItems();
+            })
+        }
+
+        var btn_discount_percents = $('.btn-discount-percent');
+        for (let i = 0; i < btn_discount_percents.length; i++){
+            btn_discount_percents[i].addEventListener('click', e=>{
+                data[i].discount = parseInt(input_discount_percents[i].value) * data[i].unitprice / 100;
+                renderItems();
+            })
+        }
+
+        var discount_texts = $('.discount-text');
+        for (let i = 0; i < discount_texts.length; i++){
+            if(data[i].discount == 0){
+
+            }
+            else{
+                discount_texts[i].textContent = "Giảm " + data[i].discount + "đ/1 sản phẩm.";
+            }
+        }
+    }
+
+    function addItem(item) {
+        var existItem = data.find(i => i.id === item.id);
+        if (existItem === undefined) {
+            var newItem = {
+                id: item.id,
+                name: item.name,
+                dvt: item.dvt,
+                unitprice: item.price,
+                quantity: 1,
+                discount: 0, //VND
+                total: item.price,
+                totalEND: item.price,
+                quantityOfWarehouse: item.quantityOfWarehouse,
+            }
+            data.push(newItem);
+            renderItems();
+        }
+        else {
+            existItem.quantity = parseInt(existItem.quantity) + 1;
+            renderItems();
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        // Init tabs panel category
+        var listProduct = document.getElementById('list-product');
+        var tabs = listProduct.getElementsByClassName('simplebar-content');
+        for (i = 0; i < tabs.length; i++) {
+            tabs[i].classList.add('row');
+        }
+        // end Init tabs panel category
+        // Add Item to Cart
+        $('.item-product').on("click", function (e) {
+            var item = {
+                id: $(this).data('id'),
+                name: $(this).data('name'),
+                dvt: $(this).data('dvt'),
+                price: $(this).data('price'),
+                quantityOfWarehouse: $(this).data('quantity'),
+            }
+            if ($(this).data('quantity') == 0){
+                swal("Không thể thêm vào giỏ hàng!", "Số lượng trong kho : 0", "error");
+            }else{
+                addItem(item);
+            }
+            
+        });
+        // Load suggest
+        var input = document.getElementById("my-input");
+        var awesomplete = new Awesomplete(input, {
+            minChars: 1,
+            list: "#mylist",
+        });
+        //
+    });
+    // submit cart to  server 
+    $('#orderandpay').click(function (e) {
+        var json = {
+            idCustomer: $('#my-input').val(),
+            order_details: data,
+            totalCart: totalCart,
+            totalQuantity: totalQuantity,
+            totalDiscount: totalDiscount,
+            totalPayment: totalPayment,
+        };
+        console.log(json);
+        axios({
+            method: 'POST',
+            url: 'http://localhost:3000/orders/orderandpay',
+            data: JSON.stringify(json),
+            headers: {
+                'Content-Type': 'application/json',
+            }
+
+        }).then(async (res) => {
+            if (res.status == 201) {
+                await swal("Good job!", "You clicked the button!", "success");
+                $('#get_orders').submit();
+            }
+            else {
+                await alert("Đã xảy ra lỗi");
+                $('#get_orders').submit();
+            }
+        })
+    });
+    // submit luu lai
+    $('#order').click(function (e) {
+        var json = {
+            idCustomer: $('#my-input').val(),
+            order_details: data,
+            totalCart: totalCart,
+            totalQuantity: totalQuantity,
+            totalDiscount: totalDiscount,
+            totalPayment: totalPayment,
+        };
+        axios({
+            method: 'POST',
+            url: 'http://localhost:3000/orders/order',
+            data: JSON.stringify(json),
+            headers: {
+                'Content-Type': 'application/json',
+            }
+
+        }).then(async (res) => {
+            if (res.status == 201) {
+                await swal("Good job!", "You clicked the button!", "success");
+                $('#get_orders').submit();
+            }
+            else {
+                await alert("Đã xảy ra lỗi");
+                $('#get_orders').submit();
+            }
+        })
+    });
+
+    function ParseVND(input){
+        return input.toLocaleString('it-IT', {style : 'currency', currency : 'VND'});
+    }
+</script>

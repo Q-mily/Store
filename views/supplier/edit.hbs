@@ -1,0 +1,110 @@
+<div class="container-fluid">
+
+    <!-- start page title -->
+    <div class="row">
+        <div class="col-12">
+            <div class="page-title-box">
+                <h4 class="page-title">Chỉnh sửa nhà cung cấp</h4>
+            </div>
+        </div>
+    </div>
+    <!-- end page title -->
+
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row mb-2">
+                        <form method="post" action="/suppliers/{{editSupplier._id}}?_method=PUT" id="updateForm">
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Tên nhà cung cấp</label>
+                            <input type="text" id="name" value="{{editSupplier.name}}" class="form-control" name="name">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="phone" class="form-label">Số điện thoại</label>
+                            <input type="numeric" id="phone" value="{{editSupplier.phone}}" name="phone" class="form-control"
+                                    placeholder="0123456789">
+                        </div>
+                        <div class="mb-3">
+                            <label for="address" class="form-label">Địa chỉ</label>
+                            <input type="text" id="address" value="{{editSupplier.address}}" name="address" class="form-control" placeholder="hcm">
+                        </div>
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" id="email" value="{{editSupplier.email}}" name="email" class="form-control" placeholder="hcm">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Chỉnh sửa</button>
+                        </form>
+                    </div>
+                </div> <!-- end card-body-->
+            </div> <!-- end card-->
+        </div> <!-- end col -->
+    </div>
+    <!-- end row -->
+
+</div> <!-- container -->
+<script>
+    function validForm() {
+        return $.ajax({
+            url : `http://localhost:3000/api/supplierUpdatevalid/{{editSupplier._id}}`,
+            type : "post",
+            dataType:"json",
+            data : {     
+                name : $('#name').val(),
+                address : $('#address').val(),
+                phone : $('#phone').val(),
+                email : $('#email').val()
+            },
+            success : function (result){
+                if(result.errors.length == 0){
+                    alert('ko lỗi');
+                    isSubmit = true;    
+                    return true;         
+                }
+                alert(result.errors[0].msg);
+                isSubmit = false;  
+                return false;       
+            },
+            error: function(xhr, status, error){
+                alert("Result: " + status + " " + error + " " + xhr.status + " " + xhr.statusText);
+                isSubmit = false;
+                return false;
+            }
+        });
+    }
+    $('#updateForm').submit(function (e){
+        var isSubmit = false;
+        var ajaxCall = $.ajax({
+            url : `http://localhost:3000/api/supplierUpdatevalid/{{editSupplier._id}}`,
+            type : "post",
+            dataType:"json",
+            data : { 
+                name : $('#name').val(),
+                address : $('#address').val(),
+                phone : $('#phone').val(),
+                email : $('#email').val()
+            },
+            success : function (result){
+                if(result.errors.length == 0){                   
+                    isSubmit = true;    
+                    return true;         
+                }
+                alert(result.errors[0].msg);
+                isSubmit = false;  
+                return false;       
+            },
+            error: function(xhr, status, error){
+                alert("Result: " + status + " " + error + " " + xhr.status + " " + xhr.statusText);
+                isSubmit = false;
+                return false;
+            }
+        });
+        ajaxCall.done(function(data) {           
+            if (isSubmit){
+                $('#updateForm').submit();       
+            }
+        }); 
+        return false;   
+    });
+</script>

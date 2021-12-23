@@ -1,0 +1,131 @@
+                    <div class="container-fluid">    
+                        <!-- start page title -->
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="page-title-box">                  
+                                    <h4 class="page-title">Nhân viên</h4>
+                                </div>
+                            </div>
+                        </div>     
+                        <!-- end page title --> 
+
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="row mb-2">
+                                            <div class="col-sm-4">
+                                                <a href="/users/create" class="btn btn-danger mb-2"><i class="mdi mdi-plus-circle me-2"></i>Thêm mới</a>
+                                            </div>
+                                            <div class="col-sm-8">                                             
+                                            </div><!-- end col-->
+                                        </div>
+                
+                                        <div class="table-responsive">
+                                            <table class="table table-centered table-striped dt-responsive nowrap w-100" id="products-datatable-user">
+                                                <thead>
+                                                    <tr>
+                                                        <th style="width: 20px;">
+                                                            <div class="form-check">
+                                                                <input type="checkbox" class="form-check-input" id="customCheck1">
+                                                                <label class="form-check-label" for="customCheck1">&nbsp;</label>
+                                                            </div>
+                                                        </th>
+                                                        <th>Nhân viên</th>
+                                                        <th>Số điện thoại</th>
+                                                        <th>username</th>
+                                                        <th>Địa chỉ</th>
+                                                        <th>Vai trò</th>                                                 
+                                                        <th>Trạng thái</th>
+                                                        <th style="width: 75px;">Action</th>                                     
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {{#each users}}
+                                                    <tr>                                                     
+                                                        <td>
+                                                            <div class="form-check">
+                                                                <input type="checkbox" class="form-check-input" id="customCheck2">
+                                                                <label class="form-check-label" for="customCheck2">&nbsp;</label>
+                                                            </div>
+                                                        </td>
+                                                        <td class="table-user">
+                                                            <img src="assets/images/users/avatar-4.jpg" alt="table-user" class="me-2 rounded-circle">
+                                                            <a href="javascript:void(0);" class="text-body fw-semibold">{{this.name}}</a>
+                                                        </td>
+                                                        <td> {{this.phone}} </td>                                                                                                       
+                                                        <td> {{this.username}} </td>
+                                                        <td> {{this.address}} </td>                                      
+                                                        <td> {{this.idrole}} </td>                                       
+                                                        <td>
+                                                            <span class="badge badge-success-lighten">Active</span>
+                                                        </td>   
+                                                        <td>
+                                                            <a href="/users/{{this.iduser}}/edit" class="action-icon"> <i class="mdi mdi-square-edit-outline"></i></a>
+                                                            <a class="action-icon" data-id="{{this.iduser}}"
+                                                                data-bs-toggle="modal" data-bs-target="#danger-header-modal"
+                                                            > <i class="mdi mdi-delete"></i></a>
+                                                        </td>
+                                                    </tr> 
+                                                    {{/each}}                                                               
+                                                </tbody>
+                                            </table>
+
+                                            <div id="danger-header-modal" class="modal fade" tabindex="-1" aria-labelledby="danger-header-modalLabel" style="display: none;" aria-hidden="true">
+                                                    <div class="modal-dialog">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header modal-colored-header bg-danger">
+                                                                <h4 class="modal-title" id="danger-header-modalLabel">Xóa nhân viên ?</h4>
+                                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                <h5 class="mt-0">Bạn muốn xóa nhân viên</h5>                                           
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-light" data-bs-dismiss="modal">Đóng</button>
+                                                                <button id="btnDelete" type="button" class="btn btn-danger">Xác nhận</button>
+                                                            </div>
+                                                        </div><!-- /.modal-content -->
+                                                    </div><!-- /.modal-dialog -->
+                                                </div>
+
+                                        </div>
+                                    </div> <!-- end card-body-->
+                                </div> <!-- end card-->
+                            </div> <!-- end col -->
+                        </div>
+                        <!-- end row -->     
+                        <form method="POST" id="formDeleteUser">
+
+                        </form>            
+                    <script>
+                        // alert
+                        {{#if isUserCreated}}
+                            swal("Thêm mới nhân viên thành công!",'' ,"success");
+                        {{/if}}
+                        {{#if isUserDeleted}}
+                            swal("Xóa nhân viên thành công!",'' ,"success");
+                        {{/if}}
+                        {{#if isUserUpdated}}
+                            swal("Cập nhật nhân viên thành công!", '',"success");
+                        {{/if}}
+                        // alert
+                        document.addEventListener('DOMContentLoaded', function () {
+                            var UId;
+                            var deleteForm = document.forms['formDeleteUser'];
+                            var btnDelete = document.getElementById('btnDelete');
+ 
+
+                            $('#danger-header-modal').on('show.bs.modal', function (event) {
+                            var button = $(event.relatedTarget);
+                            UId = button.data('id');                      
+                            })
+
+                            btnDelete.onclick = function(){
+                                deleteForm.action = '/users/' + UId + '/delete';
+                                deleteForm.submit();
+                            }
+                        });
+                    </script>      
+                    </div> <!-- container -->
+                

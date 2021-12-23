@@ -1,0 +1,74 @@
+<div class="tab-pane show active" id="input-types-preview">
+                            <form method="POST" action="/product/update/" enctype="multipart/form-data">
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <div class="mb-3">
+                                            <label for="namep" class="form-label">Tên sản phẩm</label>
+                                            <input type="text" id="namep" class="form-control" name="Name"
+                                                value="{{item.Name}}">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="namep" class="form-label">loại sản phẩm</label>
+
+                                            <select name="idType" id="" class="form-select" value="{{this.a.displayname}}">
+                                                {{#each item1}}
+                                                <option value="{{this.idType}}">{{this.displayname}}</option>
+                                                {{/each}}
+                                            </select>
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <label for="example-date" class="form-label">Price</label>
+                                            <input class="form-control" id="example-date" type="number" name="Price"
+                                                value="{{item.Price}}">
+                                        </div>
+              
+                                        <div class="mb-3">
+                                            <label for="example-date" class="form-label">Quantity</label>
+                                            <input class="form-control" id="" type="number" name="Quantity"
+                                                value="{{item.Quantity}}">
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <label for="namep" class="form-label">Đơn vị tính</label>
+                                            <select name="dvt" id="" class="form-select" value="{{this.dvt}}">
+                                                {{#each items2}}
+                                                <option value="{{this.displayname}}">{{this.displayname}}</option>
+                                                {{/each}}
+                                            </select>
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <input type="file" class="custom-file-input" id="imgInp" accept="image/*"
+                                                name="productImage">
+                                        </div>
+
+                                    </div> <!-- end col -->
+                                    <div class="col-lg-6">
+                                        <img style="width: 300px; height:300px" id="blah"
+                                            src="assets/uploads/{{item.Image}}" alt="your image" />
+                                    </div>
+                                </div>
+                                <input name="id" value="{{item._id}}" style="visibility: hidden;">
+
+                                <button class="btn btn-success" style="float:left;">Lưu thay đổi</button>
+                            </form>
+                            <!-- end row-->
+                        </div> <!-- end preview-->
+
+                    </div> <!-- end tab-content-->
+                </div> <!-- end card-body -->
+            </div> <!-- end card -->
+        </div><!-- end col -->
+        <script>
+            imgInp.onchange = evt => {
+                const [file] = imgInp.files
+                if (file) {
+                    blah.src = URL.createObjectURL(file)
+                }
+            }
+        </script>
+    </div><!-- end row -->
+
+
+</div>

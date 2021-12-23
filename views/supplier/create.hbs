@@ -1,0 +1,141 @@
+<div class="container-fluid">
+
+    <!-- start page title -->
+    <div class="row">
+        <div class="col-12">
+            <div class="page-title-box">
+                <h4 class="page-title">Thêm nhà cung cấp</h4>
+            </div>
+        </div>
+    </div>
+    <!-- end page title -->
+
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row mb-2">
+                        {{#each alerts}}
+                            <div class="alert alert-warning" role="alert">
+                                {{this.msg}}
+                            </div>
+                        {{/each}}
+                        <form method="post" action="/suppliers/store" id="createForm">
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Tên nhà cung cấp</label>
+                            {{!-- {{#if values}}
+                            <input type="text" value="{{values.name}}" id="name" class="form-control" name="name">
+                            {{else}}
+                            
+                            {{/if}} --}}
+                            <input type="text" id="name" class="form-control" name="name">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="phone" class="form-label">Số điện thoại</label>
+                            {{!-- {{#if values}}
+                            <input type="numeric" value="{{values.phone}}" id="phone" name="phone" class="form-control"
+                                placeholder="0123456789">
+                            {{else}}
+                            
+                            {{/if}} --}}
+                            <input type="numeric" id="phone" name="phone" class="form-control"
+                                placeholder="0123456789">
+                        </div>
+                        <div class="mb-3">
+                            <label for="address" class="form-label">Địa chỉ</label>
+                            {{!-- {{#if values}}
+                            <input type="text" value="{{values.address}}" id="address" name="address" class="form-control"
+                                placeholder="hcm">
+                            {{else}}
+                            
+                            {{/if}} --}}
+                            <input type="text" id="address" name="address" class="form-control"
+                                placeholder="hcm">
+                        </div>
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email</label>
+                            {{!-- {{#if values}}
+                            <input type="email" value="{{values.email}}" id="email" name="email" class="form-control"
+                                placeholder="abc@gmail.com">
+                            {{else}}
+                            
+                            {{/if}} --}}
+                            <input type="email" id="email" name="email" class="form-control"
+                                placeholder="abc@gmail.com">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Thêm mới</button>
+                        </form>
+                    </div>
+                </div> <!-- end card-body-->
+            </div> <!-- end card-->
+        </div> <!-- end col -->
+    </div>
+    <!-- end row -->
+
+</div> <!-- container -->
+
+<script>
+    function validForm() {
+        return $.ajax({
+            url : "http://localhost:3000/api/supplierValidator",
+            type : "post",
+            dataType:"json",
+            data : {               
+                name : $('#name').val(),
+                address : $('#address').val(),
+                phone : $('#phone').val(),
+                email : $('#email').val()
+            },
+            success : function (result){
+                if(result.errors.length == 0){
+                    alert('ko lỗi');
+                    isSubmit = true;    
+                    return true;         
+                }
+                alert(result.errors[0].msg);
+                isSubmit = false;  
+                return false;       
+            },
+            error: function(xhr, status, error){
+                alert("Result: " + status + " " + error + " " + xhr.status + " " + xhr.statusText);
+                isSubmit = false;
+                return false;
+            }
+        });
+    }
+    $('#createForm').submit(function (e){
+        var isSubmit = false;
+        var ajaxCall = $.ajax({
+            url : "http://localhost:3000/api/supplierValidator",
+            type : "post",
+            dataType:"json",
+            data : {               
+                name : $('#name').val(),
+                address : $('#address').val(),
+                phone : $('#phone').val(),
+                email : $('#email').val()
+            },
+            success : function (result){
+                if(result.errors.length == 0){                   
+                    isSubmit = true;    
+                    return true;         
+                }
+                alert(result.errors[0].msg);
+                isSubmit = false;  
+                return false;       
+            },
+            error: function(xhr, status, error){
+                alert("Result: " + status + " " + error + " " + xhr.status + " " + xhr.statusText);
+                isSubmit = false;
+                return false;
+            }
+        });
+        ajaxCall.done(function(data) {           
+            if (isSubmit){
+                $('#createForm').submit();       
+            }
+        }); 
+        return false;   
+    });
+</script>

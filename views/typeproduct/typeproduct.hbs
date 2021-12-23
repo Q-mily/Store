@@ -1,0 +1,163 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-xxl-12">
+            <!-- tasks panel -->
+            <div class="mt-4">
+                <h5 class="m-0 pb-2">
+                    <a class="text-dark" data-bs-toggle="collapse" href="#orders" role="button" aria-expanded="false"
+                        aria-controls="todayTasks">
+                        <i class='uil uil-angle-down font-18'></i>Loại sản phẩm <span class="text-muted"></span>
+                    </a>
+                </h5>
+
+                <div class="collapse show" id="orders">
+                    <div class="card mb-0">
+                        <div class="card-body">
+
+                            <div class="row mb-2">
+                                <div class="col-sm-4">
+                                    <a  class="js-add-typeproduct btn btn-danger mb-2"><i class="mdi mdi-plus-circle me-2"></i>Thêm
+                                        mới</a>
+                                </div>
+                                <div class="col-sm-8">
+                                </div><!-- end col-->
+                            </div>
+
+                            <div class="table-responsive">
+                                <table id="basic-datatable" class="table dt-responsive nowrap w-100">
+                                    <thead>
+                                        <tr>
+                                            <th>Name</th>
+                                            <th style="width: 125px;">Action</th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+                                        {{#each item}}
+                                        <tr>
+                                            <td>{{this.displayname}}</td>
+                                            <td> <a href="/product/deletetype/{{this.idType}}" class="action-icon"> <i
+                                                        class="mdi mdi-delete"></i></a></td>
+                                        </tr>
+                                        {{/each}}
+                                    </tbody>
+                                </table>
+                            </div>
+
+                        </div> <!-- end card-body-->
+                    </div> <!-- end card -->
+                </div> <!-- end .collapse-->
+            </div> <!-- end .mt-2-->
+                   </div> <!-- end col -->
+    </div>
+    <div class="row">
+        <div class="col-xxl-12">
+            <!-- tasks panel -->
+            <div class="mt-4">
+                <h5 class="m-0 pb-2">
+                    <a class="text-dark" data-bs-toggle="collapse" href="#type" role="button" aria-expanded="false"
+                        aria-controls="todayTasks">
+                        <i class='uil uil-angle-down font-18'></i>Đơn vị tính <span class="text-muted"></span>
+                    </a>
+                </h5>
+
+                <div class="collapse show" id="type">
+                    <div class="card mb-0">
+                        <div class="card-body">
+                            <div class="row mb-2">
+                                <div class="col-sm-4">
+                                    <a class="js-add-typeproduct-dvt btn btn-danger mb-2"><i class="mdi mdi-plus-circle me-2"></i>Thêm
+                                        mới</a>
+                                </div>
+                                <div class="col-sm-8">
+                                </div><!-- end col-->
+                            </div>
+
+                            <div class="table-responsive">
+                                <table id="basic-datatable"  class="table dt-responsive nowrap w-100">
+                                    <thead>
+                                        <tr>
+                                            <th>Name</th>
+                                            <th style="width: 125px;">Action</th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+                                        {{#each item1}}
+                                        <tr>
+                                            <td>{{this.displayname}}</td>
+                                            <td> <a href="/product/deletedvt/{{this._id}}" class="action-icon"> <i
+                                                        class="mdi mdi-delete"></i></a></td>
+                                        </tr>
+                                        {{/each}}
+                                    </tbody>
+                                </table>
+                            </div>
+
+                        </div> <!-- end card-body-->
+                    </div> <!-- end card -->
+                </div> <!-- end .collapse-->
+            </div> <!-- end .mt-2-->
+        </div> <!-- end col -->
+    </div>
+    <!-- end row-->
+</div> <!-- container -->
+<!--form type Product -->
+<form action="/product/createtype" method="post">
+    <dialog id="form-add-typeproduct">
+        <div class="container-fluid">
+            <div class="modal-close js-modal-close-add-type"
+                style="cursor: pointer;float:right; width: 20px;height: 20px; display: inline-block;">
+                <i class="mdi mdi-close"></i>
+            </div>
+            <div class="mb-3">
+                <label for="simpleinput" class="form-label">Text</label>
+                <input type="text" id="simpleinput" name="displayname" class="form-control">
+            </div>
+            <button class="btn btn-success" style="float:left;">Lưu</button>
+        </div>
+    </dialog>
+</form>
+<script>
+    const close_add_type = document.querySelector('.js-modal-close-add-type');
+    const modald = document.getElementById('form-add-typeproduct');
+    const aaa = document.querySelector('.js-add-typeproduct');
+    function hide1() {
+        modald.close();
+    }
+    function show1() {
+        modald.showModal();
+    }
+    aaa.addEventListener('click', show1);
+    close_add_type.addEventListener('click', hide1);
+</script>
+
+<form action="/product/createdvt" method="post">
+    <dialog id="form-add-typeproduct-dvt">
+        <div class="container-fluid">
+            <div class="modal-close js-modal-close-add-type-dvt"
+                style="cursor: pointer;float:right; width: 20px;height: 20px; display: inline-block;">
+                <i class="mdi mdi-close"></i>
+            </div>
+            <div class="mb-3">
+                <label for="simpleinput" class="form-label">Text</label>
+                <input type="text" id="simpleinput" name="displayname" class="form-control">
+            </div>
+            <button class="btn btn-success" style="float:left;">Lưu</button>
+        </div>
+    </dialog>
+</form>
+
+<script>
+    const close_add_type1 = document.querySelector('.js-modal-close-add-type-dvt');
+    const modald1 = document.getElementById('form-add-typeproduct-dvt');
+    const aaa1 = document.querySelector('.js-add-typeproduct-dvt');
+    function hide2() {
+        modald1.close();
+    }
+    function show2() {
+        modald1.showModal();
+    }
+    aaa1.addEventListener('click', show2);
+    close_add_type1.addEventListener('click', hide2);
+</script>

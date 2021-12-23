@@ -1,0 +1,231 @@
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-xxl-6">
+                                <!-- start page title -->
+                                <div class="page-title-box">                               
+                                    <h4 class="page-title">Phân quyền</h4>
+                                </div>
+                                <!-- end page title -->
+
+                                <!-- tasks panel -->
+                                <div class="mt-2">
+                                    <h5 class="m-0 pb-2">
+                                        <a class="text-dark" data-bs-toggle="collapse" href="#AdminRole" role="button" aria-expanded="false" aria-controls="todayTasks">
+                                            <i class='uil uil-angle-down font-18'></i>Admin <span class="text-muted">(10)</span>
+                                        </a>
+                                    </h5>
+
+                                    <div class="collapse show" id="AdminRole">
+                                        <div class="card mb-0">
+                                            <div class="card-body">    
+                                                <form method="POST" action="/role/1/edit">                                             
+                                                <div class="row justify-content-sm-between mt-1">
+                                                    <div class="col-sm-12 mb-2 mb-sm-0">
+                                                        <div class="form-check">
+                                                            <input type="checkbox" class="form-check-input" id="admin1" name="admin1"
+                                                            {{#if peradmin.check1}}
+                                                            checked
+                                                            {{/if}}
+                                                            >
+                                                            <label class="form-check-label" for="admin1">
+                                                                Quản lý sản phẩm
+                                                            </label>
+                                                        </div> <!-- end checkbox -->
+                                                    </div> <!-- end col -->                                              
+                                                </div>  
+                                                <div class="row justify-content-sm-between mt-1">
+                                                    <div class="col-sm-12 mb-2 mb-sm-0">
+                                                        <div class="form-check">
+                                                            <input type="checkbox" class="form-check-input" id="admin2" name="admin2"
+                                                            {{#if peradmin.check2}}
+                                                            checked
+                                                            {{/if}}
+                                                            >
+                                                            <label class="form-check-label" for="admin2">
+                                                                Quản lý khách hàng
+                                                            </label>
+                                                        </div> <!-- end checkbox -->
+                                                    </div> <!-- end col -->                                              
+                                                </div>   
+                                                <div class="row justify-content-sm-between mt-1">
+                                                    <div class="col-sm-12 mb-2 mb-sm-0">
+                                                        <div class="form-check">
+                                                            <input type="checkbox" class="form-check-input" id="admin5" name="admin5"
+                                                            {{#if peradmin.check5}}
+                                                            checked
+                                                            {{/if}}
+                                                            >
+                                                            <label class="form-check-label" for="admin5">
+                                                                Quản lý nhân viên
+                                                            </label>
+                                                        </div> <!-- end checkbox -->
+                                                    </div> <!-- end col -->                                              
+                                                </div>    
+                                                <div class="row justify-content-sm-between mt-1">
+                                                    <div class="col-sm-12 mb-2 mb-sm-0">
+                                                        <div class="form-check">
+                                                            <input type="checkbox" class="form-check-input" id="admin6" name="admin6"
+                                                            {{#if peradmin.check6}}
+                                                            checked
+                                                            {{/if}}
+                                                            >
+                                                            <label class="form-check-label" for="admin6">
+                                                                Quản lý bán hàng
+                                                            </label>
+                                                        </div> <!-- end checkbox -->
+                                                    </div> <!-- end col -->                                              
+                                                </div>    
+                                                <div class="row justify-content-sm-between mt-1">
+                                                    <div class="col-sm-12 mb-2 mb-sm-0">
+                                                        <div class="form-check">
+                                                            <input type="checkbox" class="form-check-input" id="admin7" name="admin7"
+                                                            {{#if peradmin.check7}}
+                                                            checked
+                                                            {{/if}}
+                                                            >
+                                                            <label class="form-check-label" for="admin7">
+                                                                Quản lý quy định
+                                                            </label>
+                                                        </div> <!-- end checkbox -->
+                                                    </div> <!-- end col -->                                              
+                                                </div>    
+                                                <div class="row justify-content-sm-between mt-1">
+                                                    <div class="col-sm-12 mb-2 mb-sm-0">
+                                                        <div class="form-check">
+                                                            <input type="checkbox" class="form-check-input" id="admin8" name="admin8"
+                                                            {{#if peradmin.check8}}
+                                                            checked
+                                                            {{/if}}
+                                                            >
+                                                            <label class="form-check-label" for="admin8">
+                                                                Xem báo cáo
+                                                            </label>
+                                                        </div> <!-- end checkbox -->
+                                                    </div> <!-- end col -->                                              
+                                                </div>   
+                                                
+                                                </form>                                                              
+                                                <!-- end task -->
+                                                
+                                            </div> <!-- end card-body-->
+                                        </div> <!-- end card -->
+                                    </div> <!-- end .collapse-->
+
+                            <!-- Nhan vien -->
+                                    <h5 class="m-0 pb-2 mt-2">
+                                        <a class="text-dark" data-bs-toggle="collapse" href="#StaffRole" role="button" aria-expanded="false" aria-controls="todayTasks">
+                                            <i class='uil uil-angle-down font-18'></i>Nhân viên <span class="text-muted">(10)</span>
+                                        </a>
+                                    </h5>
+
+                                    <div class="collapse show" id="StaffRole">
+                                        <div class="card mb-0">
+                                            <div class="card-body">         
+                                                <form method="POST" action="/role/2/edit">                                    
+                                                <div class="row justify-content-sm-between mt-1">
+                                                    <div class="col-sm-12 mb-2 mb-sm-0">
+                                                        <div class="form-check">
+                                                            <input type="checkbox" class="form-check-input" id="staff1" name="staff1"
+                                                            {{#if perstaff.check1}}
+                                                            checked
+                                                            {{/if}}
+                                                            >
+                                                            <label class="form-check-label" for="staff1">
+                                                                Quản lý sản phẩm
+                                                            </label>
+                                                        </div> <!-- end checkbox -->
+                                                    </div> <!-- end col -->                                              
+                                                </div>  
+                                                <div class="row justify-content-sm-between mt-1">
+                                                    <div class="col-sm-12 mb-2 mb-sm-0">
+                                                        <div class="form-check">
+                                                            <input type="checkbox" class="form-check-input" id="staff2" name="staff2"
+                                                            {{#if perstaff.check2}}
+                                                            checked
+                                                            {{/if}}
+                                                            >
+                                                            <label class="form-check-label" for="staff2">
+                                                                Quản lý khách hàng
+                                                            </label>
+                                                        </div> <!-- end checkbox -->
+                                                    </div> <!-- end col -->                                              
+                                                </div>    
+
+                                               
+                                                <div class="row justify-content-sm-between mt-1">
+                                                    <div class="col-sm-12 mb-2 mb-sm-0">
+                                                        <div class="form-check">
+                                                            <input type="checkbox" class="form-check-input" id="staff5" name="staff5"
+                                                            {{#if perstaff.check5}}
+                                                            checked
+                                                            {{/if}}
+                                                            >                                 
+                                                            <label class="form-check-label" for="staff5">
+                                                                Quản lý nhân viên
+                                                            </label>
+                                                        </div> <!-- end checkbox -->
+                                                    </div> <!-- end col -->                                              
+                                                </div>    
+                                                <div class="row justify-content-sm-between mt-1">
+                                                    <div class="col-sm-12 mb-2 mb-sm-0">
+                                                        <div class="form-check">
+                                                            <input type="checkbox" class="form-check-input" id="staff6" name="staff6"
+                                                            {{#if perstaff.check6}}
+                                                            checked
+                                                            {{/if}}
+                                                            >
+                                                            <label class="form-check-label" for="staff6">
+                                                                Quản lý bán hàng
+                                                            </label>
+                                                        </div> <!-- end checkbox -->
+                                                    </div> <!-- end col -->                                              
+                                                </div>    
+                                                <div class="row justify-content-sm-between mt-1">
+                                                    <div class="col-sm-12 mb-2 mb-sm-0">
+                                                        <div class="form-check">
+                                                            <input type="checkbox" class="form-check-input" id="staff7" name="staff7"
+                                                            {{#if perstaff.check7}}
+                                                            checked
+                                                            {{/if}}
+                                                            >
+                                                            <label class="form-check-label" for="staff7">
+                                                                Quản lý quy định
+                                                            </label>
+                                                        </div> <!-- end checkbox -->
+                                                    </div> <!-- end col -->                                              
+                                                </div>    
+                                                <div class="row justify-content-sm-between mt-1">
+                                                    <div class="col-sm-12 mb-2 mb-sm-0">
+                                                        <div class="form-check">
+                                                            <input type="checkbox" class="form-check-input" id="staff8" name="staff8"
+                                                            {{#if perstaff.check8}}
+                                                            checked
+                                                            {{/if}}
+                                                            >
+                                                            <label class="form-check-label" for="staff8">
+                                                                Xem báo cáo
+                                                            </label>
+                                                        </div> <!-- end checkbox -->
+                                                    </div> <!-- end col -->                                                                                      
+                                                </div>   
+                                                <button class="btn btn-success btn-sm ms-3" style="float: right;">Cập nhật</button>   
+                                                </form>                                                                     
+                                                <!-- end task -->
+                                                
+                                            </div> <!-- end card-body-->
+                                        </div> <!-- end card -->
+                                    </div> <!-- end .collapse-->
+                                </div> <!-- end .mt-2-->
+                                         
+                            </div> <!-- end col -->
+
+                            <!-- Quy định -->
+                            
+                        </div>
+                        <!-- end row-->
+</div> <!-- container -->
+<script>
+    {{#if isUpdatedRegulation}}
+        swal("Cập nhật quy định thành công!",'' ,"success");
+    {{/if}}
+</script>

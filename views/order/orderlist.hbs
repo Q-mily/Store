@@ -1,0 +1,100 @@
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-xxl-12">                     
+                                <!-- tasks panel -->
+                                
+                                <div class="page-title-box">                               
+                                    <h4 class="page-title">Hóa đơn bán hàng</h4>
+                                </div>
+
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="row mb-2">    
+                                            <div class="col-sm-6">
+                                                <a href="/orders/pos" class="btn btn-danger mb-2"><i class="mdi mdi-plus-circle me-2"></i>Thêm mới</a>                   
+                                            </div>    
+                                            {{!-- <div class="col-sm-6">
+                                                <div class="text-sm-end">
+                                                    <button type="button" class="btn btn-success mb-2 me-1"><i class="mdi mdi-cog-outline"></i></button>
+                                                    <button type="button" class="btn btn-light mb-2 me-1">Import</button>
+                                                    <button type="button" class="btn btn-light mb-2">Export</button>
+                                                </div>
+                                            </div><!-- end col--> --}}
+                                        </div>
+                
+                                        <div class="table-responsive">
+                                            <table class="table table-centered w-100 dt-responsive nowrap" id="products-datatable">
+                                                <thead class="table-light">
+                                                    <tr>
+                                                        <th style="width: 20px;">
+                                                            <div class="form-check">
+                                                                <input type="checkbox" class="form-check-input" id="customCheck1">
+                                                                <label class="form-check-label" for="customCheck1">&nbsp;</label>
+                                                            </div>
+                                                        </th>
+                                                        <th>Invoice ID</th>
+                                                        <th>Ngày lập</th>
+                                                        <th>Staff</th>
+                                                        <th>Khách hàng</th>
+                                                        <th>Số lượng</th>   
+                                                        <th>Thành tiền</th>                                                   
+                                                        <th style="width: 125px;">Action</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {{#each orders_ispay}}
+                                                    <tr>
+                                                        <td>
+                                                            <div class="form-check">
+                                                                <input type="checkbox" class="form-check-input" id="customCheck2">
+                                                                <label class="form-check-label" for="customCheck2">&nbsp;</label>
+                                                            </div>
+                                                        </td>
+                                                        <td class="text-body fw-bold"> {{this.idInvoice}} </td>
+                                                        <td>
+                                                            {{this.createAt}}
+                                                        </td>
+                                                        <td>
+                                                            Minh
+                                                        </td>
+                                                        <td>
+                                                            {{this.nameCustomer}}
+                                                        </td>
+                                                        <td>
+                                                            <h5><span class="badge badge-info-lighten">{{this.quantity}}</span></h5>
+                                                        </td>
+                                                        <td>
+                                                            {{this.total}}
+                                                        </td>                               
+                                                        <td>
+                                                            <a href="orders/{{this.idInvoice}}/invoice" class="action-icon"> <i class="mdi mdi-eye"></i></a>                                  
+                                                        </td>
+                                                    </tr>   
+                                                    {{/each}}                                                                                                               
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div> <!-- end card-body-->
+                                </div>
+                            </div> <!-- end col -->                         
+                        </div>
+                        <!-- end row-->
+</div> <!-- container -->
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var UId;
+        var deleteForm = document.forms['formDeleteOrder'];
+        var btnDelete = document.getElementById('btnDelete');
+ 
+
+        $('#danger-header-modal').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget);
+        UId = button.data('id');                      
+        })
+
+        btnDelete.onclick = function(){
+            deleteForm.action = '/orders/' + UId + '/delete';
+            deleteForm.submit();
+        }
+    });
+</script>

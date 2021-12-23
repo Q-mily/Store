@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <base href="http://localhost:3000/">
+    <meta charset="utf-8">
+    <title>Quản lí cửa hàng</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="A fully featured admin theme which can be used to build CRM, CMS, etc." name="description">
+    <meta content="Coderthemes" name="author">
+    <!-- App favicon -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/awesomplete/1.1.5/awesomplete.base.css" integrity="sha512-JreNkqx4723Zhvmy8TtRDue2ZbPrPIzJSjK84o3KUsjA/eKuOW3bhea06M8urMlsFS3Yj+9m3OudzqJDrk3yOQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/awesomplete/1.1.5/awesomplete.min.js" integrity="sha512-HcBl0GSJvt4Qecm4srHapirUx0HJDi2zYXm6KUKNNUGdTIN9cBwakVZHWmRVj4MKgy1AChqhWGYcMDbRKgO0zg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <!-- -->
+    <link rel="shortcut icon" href="assets/images/favicon.ico">
+    <!-- third party css -->
+    <link href="assets/css/vendor/dataTables.bootstrap5.css" rel="stylesheet" type="text/css">
+    <link href="assets/css/vendor/responsive.bootstrap5.css" rel="stylesheet" type="text/css">
+    <link href="assets/css/vendor/jquery-jvectormap-1.2.2.css" rel="stylesheet" type="text/css">
+    <link href="assets/css/vendor/dataTables.bootstrap5.css" rel="stylesheet" type="text/css" />
+    <link href="assets/css/vendor/responsive.bootstrap5.css" rel="stylesheet" type="text/css" />
+    <!-- third party css end -->
+    <!-- Jquery-->
+    <!-- jQuery library -->
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <!-- Popper JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <!-- App css -->
+    <link href="assets/css/icons.min.css" rel="stylesheet" type="text/css">
+    <link href="assets/css/app.min.css" rel="stylesheet" type="text/css" id="light-style">
+    <link href="assets/css/app-dark.min.css" rel="stylesheet" type="text/css" id="dark-style">
+</head>
+
+<body class="loading"
+    data-layout-config='{"leftSideBarTheme":"dark","layoutBoxed":false, "leftSidebarCondensed":false, "leftSidebarScrollable":false,"darkMode":false, "showRightSidebarOnStart": true}'>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <!-- Begin page -->
+    <div class="wrapper">
+        <!-- ========== Left Sidebar Start ========== -->
+        <div class="leftside-menu">
+
+            <!-- LOGO -->
+            <a href="index.html" class="logo text-center logo-light">
+                <span class="logo-lg">
+                    <img src="assets/images/logo.png" alt="" height="16">
+                </span>
+                <span class="logo-sm">
+                    <img src="assets/images/logo_sm.png" alt="" height="16">
+                </span>
+            </a>
+
+            <!-- LOGO -->
+            <a href="index.html" class="logo text-center logo-dark">
+                <span class="logo-lg">
+                    <img src="assets/images/logo-dark.png" alt="" height="16">
+                </span>
+                <span class="logo-sm">
+                    <img src="assets/images/logo_sm_dark.png" alt="" height="16">
+                </span>
+            </a>
+
+            <div class="h-100" id="leftside-menu-container" data-simplebar="">
+
+                <!--- Sidemenu -->
+                <ul class="side-nav">
+                    <li class="side-nav-item">
+                        <a href="javascript:void(0)" data-url="/product" class="side-nav-link permisson"
+                        data-idpermission="1"
+                        >
+                            <i class="uil-box"></i>
+                            <span> Sản phẩm </span>
+                        </a>
+                    </li>
+                    <li class="side-nav-item">
+                        <a href="javascript:void(0)" data-url="/orders" class="side-nav-link permisson"
+                        data-idpermission="6">
+                            <i class=" uil-shopping-trolley"></i>
+                            <span> Bán hàng </span>
+                        </a>
+                    </li>
+                    <li class="side-nav-item">
+                        <a href="javascript:void(0)" data-url="/customers" class="side-nav-link permisson"
+                        data-idpermission="2">
+                            <i class="uil-users-alt"></i>
+                            <span> Khách hàng </span>
+                        </a>
+                    </li>
+                    <li class="side-nav-item">
+                        <a data-bs-toggle="collapse" href="#sidebarSystem" aria-expanded="false"
+                            aria-controls="sidebarSystem" class="side-nav-link">
+                            <i class="uil-processor"></i>
+                            <span> Hệ thống </span>
+                            <span class="menu-arrow"></span>
+                        </a>
+                        <div class="collapse" id="sidebarSystem">
+                            <ul class="side-nav-second-level">
+                                <li>
+                                    <a href="javascript:void(0)" data-url="/users" class="permisson"
+                                    data-idpermission="5">Quản lý nhân viên</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0)" data-url="/role" class="permisson"
+                                    data-idpermission="7">Quản lý quy định và phân quyền</a>
+                                </li>
+                            </ul>
+                        </div>
+                    <li class="side-nav-item">
+                        <a href="/logout" class="side-nav-link">
+                            <i class="uil-exit"></i>
+                            <span> Đăng xuất </span>
+                        </a>
+                    </li>
+            </div>
+             <form method="GET" id="getPage">
+
+            </form>     
+            <!-- Sidebar -left -->
+
+        </div>
+        <!-- Left Sidebar End -->
+
+        <!-- ============================================================== -->
+        <!-- Start Page Content here -->
+        <!-- ============================================================== -->
+        <div class="container-fluid">
+
+            <div class="content-page">
+                <div class="content">
+                    <!-- Topbar Start -->
+                    <div class="navbar-custom">
+                        <button class="button-menu-mobile open-left">
+                            <i class="mdi mdi-menu"></i>
+                        </button>
+
+                    </div>
+                    <!-- end Topbar -->
+                </div>
+                {{{body}}}
+                <!-- content -->
+            </div>
+
+
+        </div>
+
+        <!-- ============================================================== -->
+        <!-- End Page content -->
+        <!-- ============================================================== -->
+
+
+    </div>
+
+
+    <div class="rightbar-overlay"></div>
+    <!-- /End-bar -->
+
+    <!-- bundle -->
+    <script src="assets/js/vendor.min.js"></script>
+    <script src="assets/js/app.min.js"></script>
+
+    <!-- third party js -->
+    <script src="assets/js/vendor/apexcharts.min.js"></script>
+    <script src="assets/js/vendor/jquery-jvectormap-1.2.2.min.js"></script>
+    <script src="assets/js/vendor/jquery-jvectormap-world-mill-en.js"></script>
+
+    <script src="assets/js/vendor/jquery.dataTables.min.js"></script>
+    <script src="assets/js/vendor/dataTables.bootstrap5.js"></script>
+    <script src="assets/js/vendor/dataTables.responsive.min.js"></script>
+    <script src="assets/js/vendor/responsive.bootstrap5.min.js"></script>
+    <script src="assets/js/vendor/dataTables.checkboxes.min.js"></script>
+
+    <!-- aaaa-->
+    <!-- Datatables js -->
+    <script src="assets/js/vendor/jquery.dataTables.min.js"></script>
+    <script src="assets/js/vendor/dataTables.bootstrap5.js"></script>
+    <script src="assets/js/vendor/dataTables.responsive.min.js"></script>
+    <script src="assets/js/vendor/responsive.bootstrap5.min.js"></script>
+
+    <!-- Datatable Init js -->
+    <script src="assets/js/pages/demo.datatable-init.js"></script>
+
+    <!-- third party js ends -->
+
+    <!-- demo app -->
+    <script src="assets/js/pages/demo.dashboard.js"></script>
+    <script src="assets/js/pages/demo.products.js"></script>
+    <script> // Datatable user
+        $(document).ready(function () { "use strict"; $("#products-datatable-user").DataTable({ language: { paginate: { previous: "<i class='mdi mdi-chevron-left'>", next: "<i class='mdi mdi-chevron-right'>" }, info: "Showing users _START_ to _END_ of _TOTAL_", lengthMenu: 'Hiển thị <select class=\'form-select form-select-sm ms-1 me-1\'><option value="10">10</option><option value="20">20</option><option value="-1">All</option></select> users' }, pageLength: 10, columns: [{ orderable: !1, render: function (e, l, a, o) { return "display" === l && (e = '<div class="form-check"><input type="checkbox" class="form-check-input dt-checkboxes"><label class="form-check-label">&nbsp;</label></div>'), e }, checkboxes: { selectRow: !0, selectAllRender: '<div class="form-check"><input type="checkbox" class="form-check-input dt-checkboxes"><label class="form-check-label">&nbsp;</label></div>' } }, { orderable: !0 }, { orderable: !0 }, { orderable: !0 }, { orderable: !0 }, { orderable: !0 }, { orderable: !0 }, { orderable: !1 }], select: { style: "multi" }, order: [[5, "asc"]], drawCallback: function () { $(".dataTables_paginate > .pagination").addClass("pagination-rounded"), $("#products-datatable_length label").addClass("form-label") } }) });
+    </script>
+    <script> // load tabspanel
+        function getCookie(cname) {
+            let name = cname + "=";
+            let decodedCookie = decodeURIComponent(document.cookie);
+            let ca = decodedCookie.split(';');
+            for(let i = 0; i <ca.length; i++) {
+                let c = ca[i];
+                while (c.charAt(0) == ' ') {
+                c = c.substring(1);
+                }
+                if (c.indexOf(name) == 0) {
+                return c.substring(name.length, c.length);
+                }
+            }
+            return "";
+        }
+        $(document).ready(function(){
+            var listProduct = document.getElementById('list-product');
+            var tabs = listProduct.getElementsByClassName('simplebar-content');
+            for( i=0; i<tabs.length; i++){
+                tabs[i].classList.add('row');          
+            }
+
+        });
+        var actionForm;
+        document.addEventListener('DOMContentLoaded', function(){
+            $('.permisson').on("click", function(e){
+                var token = getCookie('token');
+                getPageForm = document.forms['getPage'];
+                actionForm = $(this).data('url');
+                $.ajax({
+                    url:'api/verify_permisson',
+                    headers:{
+                        token : token,     
+                        idpermission: $(this).data('idpermission'),              
+                    },
+                    data:{
+                        
+                    }
+                }).then(function(data){
+                    if(data.error == true){
+                        alert("Bạn không có quyền truy cập!");
+                    }else{
+                        getPageForm.action = actionForm;
+                        getPageForm.submit();
+                    }
+                  
+                }).catch(function(err){
+
+                });
+            });
+        })
+    </script>
+    <!-- end demo js-->
+</body>
+
+</html>

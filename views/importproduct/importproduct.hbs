@@ -1,0 +1,274 @@
+<style>
+	.awesomplete>ul {
+    border-radius: .3em;
+    margin: .2em 0 0;
+    background: hsla(0, 0%, 100%, .9);
+    background: linear-gradient(to bottom right, white, hsla(0, 0%, 100%, .8));
+    border: 1px solid rgba(0, 0, 0, .3);
+    box-shadow: .05em .2em .6em rgba(0, 0, 0, .2);
+    text-shadow: none;
+  }
+  
+  @supports (transform: scale(0)) {
+    .awesomplete>ul {
+      transition: .3s cubic-bezier(.4, .2, .5, 1.4);
+      transform-origin: 1.43em -.43em;
+    }
+    .awesomplete>ul[hidden],
+    .awesomplete>ul:empty {
+      opacity: 0;
+      transform: scale(0);
+      display: block;
+      transition-timing-function: ease;
+    }
+  }
+    @keyframes animate {
+    0%   { background-position: left;  }
+    50%  { background-position: right; }
+    100% { background-position: right; }
+  }
+
+  
+  
+  /* Pointer */
+  
+  .awesomplete>ul:before {
+    content: "";
+    position: absolute;
+    top: -.43em;
+    left: 1em;
+    width: 0;
+    height: 0;
+    padding: .4em;
+    background: white;
+    border: inherit;
+    border-right: 0;
+    border-bottom: 0;
+    -webkit-transform: rotate(45deg);
+    transform: rotate(45deg);
+  }
+  
+  .awesomplete>ul>li {
+    position: relative;
+    padding: .2em .5em;
+    cursor: pointer;
+  }
+  
+  .awesomplete>ul>li:hover {
+    background: hsl(200, 40%, 80%);
+    color: black;
+  }
+  
+  .awesomplete>ul>li[aria-selected="true"] {
+    background: hsl(205, 40%, 40%);
+    color: white;
+  }
+  
+  .awesomplete mark {
+    background: hsl(65, 100%, 50%);
+  }
+  
+  .awesomplete li:hover mark {
+    background: hsl(68, 100%, 41%);
+  }
+  
+  .awesomplete li[aria-selected="true"] mark {
+    background: hsl(86, 100%, 21%);
+    color: inherit;
+  }
+  .shopping-cart {
+    width: 750px;
+    height: auto;
+    margin: 80px auto;
+    background: #FFFFFF;
+    box-shadow: 1px 2px 3px 0px rgba(0,0,0,0.10);
+    border-radius: 6px;
+   
+    display: flex;
+    flex-direction: column;
+  }
+
+  .item {
+    padding: 20px 30px;
+    height: 120px;
+    display: flex;
+    border-bottom: solid;
+    background-color: #eef2f7;
+  }
+   
+  .buttons {
+    position: relative;
+    margin-left: 30px;
+    margin-top: 23px;
+    width: 31px;
+    height: 34px;
+  }
+
+  .delete-btn {
+    width: 18px;
+    height: 17px;
+    background: url(&amp;quot;delete-icn.svg&amp;quot;) no-repeat center;
+    display: inline-block;
+    Cursor: pointer;
+  }
+
+  .is-active {
+    animation-name: animate;
+    animation-duration: .8s;
+    animation-iteration-count: 1;
+    animation-timing-function: steps(28);
+    animation-fill-mode: forwards;
+  }
+   
+
+  .image {
+    margin-right: 50px;
+  }
+  .image img {
+    width: 50%;
+  }
+  .image,
+  .quantity,
+  .description {
+    width: 100%;
+    text-align: center;
+    margin: 6px 0;
+  }
+
+  .quantity {
+    padding-top: 20px;
+    margin-right: 60px;
+  }
+  .quantity input {
+    -webkit-appearance: none;
+    border: none;
+    text-align: center;
+    width: 32px;
+    font-size: 16px;
+    color: #43484D;
+    font-weight: 300;
+  }
+   
+  button[class*=btn] {
+    width: 30px;
+    height: 30px;
+    background-color: #E1E8EE;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+  }
+  .minus-btn img {
+    margin-bottom: 3px;
+  }
+  .plus-btn img {
+    margin-top: 2px;
+  }
+   
+  button:focus,
+  input:focus {
+    outline:0;
+  }
+
+  .total-price {
+    width: 83px;
+    padding-top: 27px;
+    text-align: center;
+    font-size: 16px;
+    color: #43484D;
+    font-weight: 300;
+  }
+
+  .description {
+    padding-top: 10px;
+    margin-right: 60px;
+    width: 300px;
+  }
+</style>
+<input list="mylist" id="my-input" class="form-control" style="width: 300px;" />
+<datalist id="mylist">
+	{{#each items}}
+	<option img="{{this.Image}}" value="{{this.Image}}" id="{{this._id}}">{{this.Name}}</option>
+	{{/each}}
+</datalist>
+<div class="shopping-cart">
+
+</div>
+<script>
+	$(document).ready(function () {
+		var input = document.getElementById("my-input");
+		var awesomplete = new Awesomplete(input, {
+			minChars: 1,
+			item: myItemFunc
+		})
+		document.getElementById('my-input').addEventListener('awesomplete-selectcomplete', function () {
+			var options = $('datalist')[0].options;
+			for (var i = 0; i < options.length; i++) {
+				if (options[i].value === this.value) {
+					var input = document.getElementById("my-input");
+					input.value = "";
+					$.ajax({
+						url: '/importproduct/getproduct',
+						method: 'post',
+						dataType: 'json',
+						data: { 'id': options[i].id },
+						success: function (res) {
+							let card = `<div class="item" id=${res.item._id}>
+										<div class="image">
+										<img src="assets/uploads/${res.item.Image}" alt="" />
+										</div>
+										<div class="description">
+											<span>${res.item.Name}</span>
+										</div>
+										<div class="quantity">
+										<button class="plus-btn" onclick="plus(this)" type="button" name="button">
+										<i class="dripicons-plus"></i>
+										</button>
+										<input type="text" readonly name="name" min="0" max="10" value="1">
+										<button class="minus-btn" onclick="minus(this)" type="button" name="button">
+										<i class="dripicons-minus"></i>
+										</button>
+										</div>
+										<div class="total-price">$549</div>
+										<button class="buttons"  onclick="test(this)">
+										<i class=" mdi mdi-delete-circle"></i>
+										</button>
+										</div>`
+							$('.shopping-cart').append(card);
+						}
+					})
+					break;
+				}
+			}
+		})
+		//shopping cart
+
+	});
+	function minus(e) {
+			var value = parseInt($(e).closest('div').find('input').val());
+			value = value - 1;
+			$(e).closest('div').find('input').val(value);
+		}
+	function plus(e){
+		var value = parseInt($(e).closest('div').find('input').val());
+			value = value + 1;
+			$(e).closest('div').find('input').val(value);
+	}
+	function test(e) {
+		e.closest('.item').remove();
+	}
+	function myItemFunc(text, input) {
+		return Awesomplete.$.create("li", {
+			innerHTML: createItem(text, input),
+			"aria-selected": "false"
+		});
+	}
+
+	function createItem(text, input) {
+		var img = document.createElement("img");
+		img.style.height = '80px';
+		img.style.width = '100px'
+		img.src = "assets/uploads/" + text.value;
+		var html = img.outerHTML + " " + text.label;
+		return html;
+	}
+</script>

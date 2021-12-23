@@ -1,0 +1,259 @@
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<form action="/orders" method="GET" id="get_orders"></form>
+<div class="row mt-2">
+                <div class="col-xl-5">
+                    <div class="card">
+                        <div class="card-body">
+                            <h4 class="header-title">Giỏ hàng</h4>                         
+                            <div class="row " style="background-color: #e0e4ea; font-weight: 600; color:black">
+                                <div class="col-4 ">Sản phẩm</div>
+                                <div class="col-3 ">Đơn giá</div>
+                                <div class="col-2 ">Số lượng</div>
+                                <div class="col-3 ">Thành tiền</div>
+                                                                                   
+                            </div>
+                            <ul class="list-group list-group-flush list-group-numbered" id="cart">                             
+                            </ul>
+                            
+                        </div> <!-- end card-body -->
+                    </div> <!-- end card-->
+                    <div class="card">
+                        <div class="card-body">
+                            <button class="btn btn-danger">Khách hàng</button>
+                            <p>Số lượng: <span  id="totalQuantity" style="float: right;">0</span></p>
+                            <p>Tổng tiền : <span    id="totalCart" style="float: right;">0</span></p>
+                            <p>Giảm giá: <span  id="totalDiscount" style="float: right;">0</span></p>
+                            <p>Tiền thanh toán: <span   id="totalPayment" style="float: right;">0</span></p>                    
+                            <button id="orderandpay" class="btn btn-danger m-1" style="float: right;" >Thanh toán</button>                        
+                            <button id="order"class="btn btn-danger m-1" style="float: right;">Lưu lại</button>                            
+                        </div>
+                    </div>
+                </div> <!-- end col -->
+                
+                <div class="col-7" id="list-product">
+                    <div class="card">
+                        <div class="row">
+                            <div class="col-sm-9">
+                                <div class="tab-content" id="v-pills-tabContent-right">
+                                    {{#each data}}
+                                    <div class="tab-pane fade"  id="v-pills-{{@index}}" role="tabpanel" aria-labelledby="v-pills-{{@index}}">                         
+                                        <div data-simplebar="" style="max-height: 700px;">        
+                                                {{#each this.items}}                
+                                                <div class="col-4">             
+                                                    <!-- Simple card -->
+                                                    <a class="item-product" href="javascript:void(0)" style="color: #6C757D;"
+                                                        data-id="{{this._id}}"
+                                                        data-name="{{this.Name}}"
+                                                        data-dvt="{{this.dvt}}"
+                                                        data-price="{{this.Price}}"
+                                                    >
+                                                    <div class="card d-block">
+                                                        <img class="card-img-top" src="assets/uploads/{{this.Image}}" alt="Card image cap">
+                                                        <div class="card-body p-1">
+                                                            <h5 class="card-title m-0 p-0">{{this.Name}}</h5>
+                                                            <p class="card-text m-0 p-0">Đơn giá: {{this.Price}}đ</p>
+                                                            <p class="card-text m-0 p-0">Đơn vị tính: {{this.dvt}}</p>
+                                                            <p class="card-text m-0 p-0">Số lượng: {{this.Quantity}}</p>                                                     
+                                                        </div> <!-- end card-body-->
+                                                    </div> <!-- end card-->
+                                                    </a>
+                                                </div>      
+                                                {{/each}}                                                                                                     
+                                        </div>                                                                   
+                                    </div>
+                                    {{/each}}
+                                </div> <!-- end tabcontent-->
+                            </div> <!-- end col-->
+                        
+                            <div class="col-sm-3 mt-2 mt-sm-0">
+                                <div class="nav flex-column nav-pills" id="v-pills-tab2" role="tablist" aria-orientation="vertical">
+                                    {{#each data}}
+                                    <a class="nav-link" id="v-pills-home-tab2" data-bs-toggle="pill" href="#v-pills-{{@index}}" role="tab" aria-controls="v-pills-{{@index}}"
+                                        aria-selected="true">
+                                        <i class="mdi mdi-home-variant d-md-none d-block"></i>
+                                        <span class="d-none d-md-block">{{this.category}}</span>
+                                    </a>    
+                                    {{/each}}
+                                </div>
+                            </div> <!-- end col-->
+                        </div> <!-- end row-->
+                    </div>
+                </div>            
+            </div>
+    <script> //load scrollbar
+        var test;
+        var btnDels;
+        var data = [          
+        ];
+        var totalCart;
+        var totalQuantity;
+        var totalDiscount;
+        var totalPayment;
+
+        function remove(i){
+            data.splice(i,1);
+            renderItems();
+        }
+
+        function renderItems(){        
+            
+            totalCart = 0;
+            totalQuantity   = 0;
+            totalDiscount   = 0;
+            totalPayment    = 0;
+
+            for(let i=0; i< data.length; i++){
+                data[i].total = data[i].unitprice * data[i].quantity;
+                data[i].totalEND = data[i].total - (data[i].discount * data[i].quantity);
+
+                totalCart = parseInt(totalCart)+ parseInt(data[i].total);
+                totalQuantity += data[i].quantity;
+                totalDiscount += data[i].discount * data[i].quantity;
+                totalPayment += data[i].totalEND;
+            }
+            
+            $('#totalCart').text(parseInt(totalCart));
+            $('#totalQuantity').text(totalQuantity);
+            $('#totalDiscount').text(totalDiscount);
+            $('#totalPayment').text(totalPayment);
+
+
+            var HTML = data.map( item => `<li class="list-group-item p-0">                                                         
+                                        <div class=" row">
+                                            <div class="col-4">           
+                                                <p class="m-0 d-inline-block align-middle font-14">
+                                                    <a href="apps-ecommerce-products-details.html" class="text-body">${item.name}</a>
+                                                    <br>
+                                                    <small class="me-2">Đơn vị tính: ${item.dvt} </small>
+                                                    <br>
+                                                    <small class="me-2" data-bs-toggle="collapse" href="#discount-${item.id}" role="button" aria-expanded="false" aria-controls="discount-${item.id}">
+                                                        Giảm giá <i class="uil uil-angle-down font-18"></i>
+                                                    </small>
+                                                </p>
+                                            </div>
+                                            <div class="col-3">
+                                                <input type="number" min="3000" value="${item.unitprice}" class="form-control unitprice" style="width: 110px;">
+                                            </div>
+                                            <div class="col-2">
+                                                <input type="number" min="1" value="${item.quantity}" class="form-control quantity" style="width: 70px;">
+                                            </div>
+                                            <div class="col-3">
+                                                <span>${item.total} <a href="javascript:void(0);" class="action-icon btn-del"> <i class="mdi mdi-delete"></i></a></span>
+                                            </div>                               
+                                        </div>
+                                       
+                                        <div class="collapse" id="discount-${item.id}">
+                                            <div class="card mb-0">
+                                                <div class="card-body">
+                                                    <div class="row">
+                                                        <div class="col-4">
+                                                          <div class="list-group" id="list-tab" role="tablist">
+                                                            <a class="list-group-item list-group-item-action active" id="list-number-list" data-bs-toggle="list" href="#list-number" role="tab" aria-controls="list-number">Giá</a>
+                                                            <a class="list-group-item list-group-item-action" id="list-percent-list" data-bs-toggle="list" href="#list-percent" role="tab" aria-controls="list-percent">Phần trăm</a>                    
+                                                          </div>
+                                                        </div>
+                                                        <div class="col-8">
+                                                          <div class="tab-content" id="nav-tabContent">
+                                                            <div class="tab-pane fade show active" id="list-number" role="tabpanel" aria-labelledby="list-number-list">
+                                                                <div class="row">
+                                                                    <div class="col-6">
+                                                                        Nhập giá tiền giảm
+                                                                        <input type="number" min="1"  max="100" value="0" class="form-control" style="width: 110px;">
+                                                                    </div>
+                                                                    <div class="col-6">
+                                                                        <button type="button" class="btn btn-info">Áp dụng</button>
+                                                                    </div>                                                     
+                                                                </div>
+                                                            </div>
+                                                            <div class="tab-pane fade" id="list-percent" role="tabpanel" aria-labelledby="list-percent-list">
+                                                                <div class="row">
+                                                                    <div class="col-6">
+                                                                        Nhập % giảm
+                                                                        <input type="number" min="1"  max="100" value="0" class="form-control" style="width: 110px;">
+                                                                    </div>
+                                                                    <div class="col-6">
+                                                                        <button type="button" class="btn btn-info">Áp dụng</button>
+                                                                    </div>                                                     
+                                                                </div>
+                                                            </div>                                                       
+                                                          </div>
+                                                        </div>
+                                                      </div>                                              
+                                                </div> 
+                                            </div>
+                                        </div>                             
+                                </li>` ).join('');
+            $('#cart').empty();
+            $('#cart').append(HTML);
+
+            btnDels = $('.btn-del');
+            for( let i=0; i<btnDels.length; i++){
+                btnDels[i].addEventListener('click', function(){
+                    console.log(data);
+                    remove(i);
+                });
+            }
+
+            inputQuantitys = $('.quantity');
+            for (let i=0; i<inputQuantitys.length; i++){
+                inputQuantitys[i].addEventListener('change', e =>{
+                    data[i].quantity= inputQuantitys[i].value;
+                    renderItems();
+                })
+            }
+
+            inputUnitPrices = $('.unitprice');
+            for (let i=0; i<inputUnitPrices.length; i++){
+                inputUnitPrices[i].addEventListener('change', e =>{
+                    data[i].unitprice= inputUnitPrices[i].value;
+                    renderItems();
+                })
+            }
+        }
+
+        function addItem(item){
+            var existItem = data.find( i => i.id === item.id);
+            if (existItem === undefined){
+                var newItem = {
+                    id : item.id,
+                    name: item.name,
+                    dvt: item.dvt,
+                    unitprice: item.price,
+                    quantity: 1,
+                    discount: 0, //VND
+                    total: item.price,
+                    totalEND : item.price,
+                }
+                data.push(newItem);
+                renderItems();
+            }
+            else{
+                existItem.quantity = parseInt(existItem.quantity) + 1;
+                renderItems();
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function () { 
+            // Init tabs panel category
+            var listProduct = document.getElementById('list-product');
+            var tabs = listProduct.getElementsByClassName('simplebar-content');
+            for( i=0; i<tabs.length; i++){
+                tabs[i].classList.add('row');
+            }
+            // end Init tabs panel category
+
+            // Add Item to Cart
+            $('.item-product').on("click", function(e){
+                var item = {
+                    id      : $(this).data('id'),
+                    name    : $(this).data('name'),
+                    dvt     : $(this).data('dvt'),
+                    price   : $(this).data('price'),
+                }         
+                addItem(item);
+            });
+
+        });
+    // submit cart to  server 
+                           
+</script>

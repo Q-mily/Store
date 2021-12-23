@@ -1,0 +1,389 @@
+<div class="container-fluid">
+    <!-- start page title -->
+    <div class="row">
+        <div class="col-12">
+            <div class="page-title-box">
+                <h4 class="page-title">SẢN PHẨM</h4>
+            </div>
+        </div>
+    </div>
+    <!-- end page title -->
+
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row mb-2">
+                        <div class="col-sm-4">
+                            <a href="javascript:void(0);" class="btn btn-danger mb-2 js-add-product"><i
+                                    class="mdi mdi-plus-circle me-2"></i>Thêm sản phẩm</a>
+                        </div>
+                        <div class="col-sm-8">
+
+                            <a href="http://localhost:3000/typeproduct" style="float: right;"
+                                class="btn btn-success mb-2 js-typeproduct"><i class="mdi mdi-cog-outline me-2"></i>
+                                Quản lý loại sản phẩm</a>
+                        </div>
+
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-centered w-100 dt-responsive nowrap" id="products-datatable">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>STT</th>
+                                    <th class="all">Tên sản phẩm</th>
+                                    <th>Loại</th>
+                                    <th>Giá</th>
+                                    <th>Số lượng</th>
+                                    <th>Tình trạng</th>
+                                    <th style="width: 115px;">Hành động</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {{#each items}}
+                                <tr>
+                                    <td>
+                                        <div class="form-check">
+                                            <input type="checkbox" class="form-check-input" id="customCheck2">
+                                            <label class="form-check-label" for="customCheck2">&nbsp;</label>
+                                        </div>
+                                    </td>
+
+                                    <td>
+                                        <img src="assets/uploads/{{this.Image}}" alt="contact-img" title="contact-img"
+                                            class="rounded me-3" height="55" width="65">
+                                        <p class="m-0 d-inline-block align-middle font-16">
+                                            <a href="apps-ecommerce-products-details.html" class="text-body">
+                                                {{this.Name}}
+                                            </a>
+                                        </p>
+                                    </td>
+                                    {{#each this.a}}
+                                    <td>
+                                        {{ this.displayname}}
+                                    </td>
+                                    {{/each}}
+                                    <td>
+                                        {{this.Price }}
+                                    </td>
+
+                                    <td>
+                                        {{this.Quantity}}
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-success">Active</span>
+                                    </td>
+
+                                    <td class="table-action">
+                                        <a href="/product/edit/{{this._id}}" class="action-icon js-edit"> <i
+                                                class="mdi mdi-square-edit-outline"></i></a>
+                                        <a style="cursor: pointer;" class="action-icon" data-id="{{this._id}}"
+                                            data-bs-toggle="modal" data-bs-target="#danger-header-modal"> <i
+                                                class="mdi mdi-delete"></i></a>
+                                    </td>
+                                    <td></td>
+                                </tr>
+                                {{/each}}
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div> <!-- end card-body-->
+            </div> <!-- end card-->
+        </div> <!-- end col -->
+    </div>
+
+    <form action="/product/create" method="post" enctype="multipart/form-data" id="createproduct">
+        <dialog id="create" class="border border-2 rounded rounded-3">
+            <div class="container-fluid">
+                <div class="modal-close js-modal-close"
+                    style="cursor: pointer;float:right; width: 20px;height: 20px; display: inline-block;">
+                    <i class="mdi mdi-close"></i>
+                </div>
+                <!-- start page title -->
+                <div class="row">
+                    <div class="col-12">
+                        <div class="page-title-box">
+                            <h4 class="page-title">Thêm sản phẩm</h4>
+
+                        </div>
+                    </div>
+                </div>
+                <!-- end page title -->
+    
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="tab-content">
+                                    <div class="tab-pane show active" id="input-types-preview">
+                                        <div class="row">
+                                            <div class="col-lg-6">
+                                                <div class="mb-3">
+                                                    <label for="namep" class="form-label ">Tên sản phẩm</label>
+                                                    <input type="text" id="namep" class="form-control" name="Name">
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="namep" class="form-label">Loại sản phẩm</label>
+                                                    <select name="idType" id="" class="form-select">
+                                                        {{#each items1}}
+                                                        <option value="{{this.idType}}">{{this.displayname}}</option>
+                                                        {{/each}}
+                                                    </select>
+                                                </div>
+    
+                                                <div class="mb-3">
+                                                    <label for="price" class="form-label">Giá</label>
+                                                    <input class="form-control" id="price" type="number" name="Price">
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="namep" class="form-label">Đơn vị tính</label>
+                                                    <select name="dvt" id="" class="form-select">
+                                                        {{#each items2}}
+                                                        <option value="{{this.displayname}}">{{this.displayname}}</option>
+                                                        {{/each}}
+                                                    </select>
+                                                </div>
+
+                                                <div class="mb-3">
+                                                    <input type="file" class="custom-file-input" id="imgInp"
+                                                        accept="image/*" name="productImage">
+                                                </div>
+    
+                                            </div> <!-- end col -->
+                                            <div class="col-lg-6">
+                                                <img style="width: 300px; height:300px" id="blah" alt="your image" />
+                                            </div>
+                                        </div>
+                                        <button class="btn btn-success" style="float:left;">Lưu</button>
+    </form>
+    <!-- end row-->
+</div> <!-- end preview-->
+
+</div> <!-- end tab-content-->
+</div> <!-- end card-body -->
+</div> <!-- end card -->
+</div><!-- end col -->
+<script>
+    imgInp.onchange = evt => {
+        const [file] = imgInp.files
+        if (file) {
+            blah.src = URL.createObjectURL(file)
+        }
+    }
+</script>
+</div><!-- end row -->
+
+
+</div>
+</dialog>
+</form>
+
+<div id="danger-header-modal" class="modal fade" tabindex="-1" aria-labelledby="danger-header-modalLabel"
+    style="display: none;" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header modal-colored-header bg-danger">
+                <h4 class="modal-title" id="danger-header-modalLabel">Xóa sản phẩm ?</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <h5 class="mt-0">Bạn muốn xóa sản phẩm</h5>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-light" data-bs-dismiss="modal">Đóng</button>
+                <button id="btnDelete" type="button" class="btn btn-danger">Xác nhận</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div>
+
+<!-- Type Product -->
+<div>
+    <dialog id="typeproduct" class="border border-2 rounded rounded-3">
+        <div class="container-fluid">
+            <div class="modal-close js-modal-close-type"
+                style="cursor: pointer;float:right; width: 20px;height: 20px; display: inline-block;">
+                <i class="mdi mdi-close"></i>
+            </div>
+
+            <div class="row mb-2">
+                <div class="col-sm-4">
+                    <a href="javascript:void(0);" class="btn btn-danger mb-2 js-add-typeproduct"><i
+                            class="mdi mdi-plus-circle me-2"></i> Thêm </a>
+                </div>
+            </div>
+            <br>
+            <table style="width: 500px;" id="basic-datatable" class="table dt-responsive nowrap w-100">
+                <thead>
+                    <tr>
+                        <th>Tên loại</th>
+                        <th>Hành động</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each items1}}
+                    <tr>
+                        <td>{{this.displayname}}</td>
+                        <td><a href="/product/deletetype/{{this.idType}}" style="cursor: pointer;"
+                                class="action-icon deletetype1" data-id="{{this._id}}"> <i
+                                    class="mdi mdi-delete "></i></a></td>
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+        </div>
+    </dialog>
+</div>
+<!--Form delete -->
+<!---->
+<!-- Form add type product-->
+<form action="/product/createtype" method="post" id="createtype">
+    <dialog id="form-add-typeproduct" class="border border-2 rounded rounded-3">
+        <div class="container-fluid">
+            <div class="modal-close js-modal-close-add-type"
+                style="cursor: pointer;float:right; width: 20px;height: 20px; display: inline-block;">
+                <i class="mdi mdi-close"></i>
+            </div>
+            <div class="mb-3">
+                <label for="displayname" class="form-label">Text</label>
+                <input type="text" id="displayname" name="displayname" class="form-control">
+            </div>
+            <button class="btn btn-success" style="float:left;">Lưu</button>
+        </div>
+    </dialog>
+</form>
+<script>
+    const close_add_type = document.querySelector('.js-modal-close-add-type');
+    const modald = document.getElementById('form-add-typeproduct');
+    const aaa = document.querySelector('.js-add-typeproduct');
+    function hide1() {
+        modald.close();
+    }
+    function show1() {
+        modald.showModal();
+    }
+    aaa.addEventListener('click', show1);
+    close_add_type.addEventListener('click', hide1);
+</script>
+<form method="POST" id="formDeleteProduct">
+</form>
+<script>
+    const modal = document.getElementById('create');
+    const a = document.querySelector('.js-add-product');
+    const closee = document.querySelector('.js-modal-close');
+   
+    function show() {
+        modal.showModal();
+    }
+    function hide() {
+        modal.close();
+    }
+    a.addEventListener('click', show);
+    closee.addEventListener('click', hide);
+</script>
+<!-- -->
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var UId;
+        var deleteForm = document.forms['formDeleteProduct'];
+        var btnDelete = document.getElementById('btnDelete');
+        $('#danger-header-modal').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget);
+            UId = button.data('id');
+        })
+        btnDelete.onclick = function () {
+            console.log(UId);
+            deleteForm.action = '/product/delete/' + UId;
+            deleteForm.submit();
+        }
+    });
+</script>
+</div>
+{{!-- AJAX --}}
+<script>
+    $('#createproduct').submit(function (e){
+        var isSubmit = false;
+        var ajaxCall = $.ajax({
+            url : "http://localhost:3000/api/productValidator",
+            type : "post",
+            dataType:"json",
+            data : {               
+                namep : $('#namep').val(),
+                idType : $('#idType').val(),
+                price : $('#price').val(),
+                imgInp : $('#imgInp').val()
+            },
+            success : function (result){
+                if(result.errors.length == 0){                   
+                    isSubmit = true;    
+                    return true;         
+                }
+                alert(result.errors[0].msg);
+                isSubmit = false;  
+                return false;       
+            },
+            error: function(xhr, status, error){
+                alert("Result: " + status + " " + error + " " + xhr.status + " " + xhr.statusText);
+                isSubmit = false;
+                return false;
+            }
+        });
+        ajaxCall.done(function(data) {           
+            if (isSubmit){
+                $('#createproduct').submit();       
+            }
+        }); 
+        return false;   
+    });
+    $('#createtype').submit(function (e){
+        var isSubmit = false;
+        var ajaxCall = $.ajax({
+            url : "http://localhost:3000/api/typeproductValidator",
+            type : "post",
+            dataType:"json",
+            data : {               
+                displayname : $('#displayname').val(),
+            },
+            success : function (result){
+                if(result.errors.length == 0){                   
+                    isSubmit = true;    
+                    return true;         
+                }
+                alert(result.errors[0].msg);
+                isSubmit = false;  
+                return false;       
+            },
+            error: function(xhr, status, error){
+                alert("Result: " + status + " " + error + " " + xhr.status + " " + xhr.statusText);
+                isSubmit = false;
+                return false;
+            }
+        });
+        ajaxCall.done(function(data) {           
+            if (isSubmit){
+                $('#createtype').submit();       
+            }
+        }); 
+        return false;   
+    });
+</script>
+
+{{!-- Message --}}
+<script>
+    {{#if isTypeCreated}}
+        swal("Thành công!", "Bạn đã thêm loại sản phẩm thành công", "success");
+    {{/if}}
+    {{#if isTypeDeleted}}
+        swal("Thành công!", "Bạn đã xóa loại sản phẩm thành công", "success");
+    {{/if}}
+    {{#if isProductDeleted}}
+        swal("Thành công!", "Bạn đã xóa sản phẩm thành công", "success");
+    {{/if}}
+    {{#if isProductCreated}}
+        swal("Thành công!", "Bạn đã thêm sản phẩm thành công", "success");
+    {{/if}}
+    {{#if isProductUpdated}}
+        swal("Thành công!", "Bạn đã chỉnh sửa sản phẩm thành công", "success");
+    {{/if}}
+</script>
