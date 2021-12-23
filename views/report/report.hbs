@@ -1,32 +1,165 @@
+<link rel="stylesheet" href="//code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
+<link rel="stylesheet" href="/resources/demos/style.css">
+<script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+<script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>
 <div class="container">
     <div class="row">
+
+        <div class="col-6">
+            <p>Ngày bắt đầu: <input type="text" id="datepicker1"></p>
+
+        </div>
+        <div class="col-6">
+            <p>Ngày kết thúc: <input type="text" id="datepicker2"></p>
+
+        </div>
+    </div>
+    <button onclick="test()" class="btn btn-primary">Xác nhận</button>
+    <div class="row">
         <div class="col-6" id="chart"></div>
-        <div class="col-6"></div>
+        <div class="col-6" id="chart1"></div>
     </div>
     <div class="row"></div>
 </div>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 <script>
-    var options = {
-        series: [44, 55, 13, 43, 22],
-        chart: {
-            width: 380,
-            type: 'pie',
-        },
-        labels: ['Team A', 'Team B', 'Team C', 'Team D', 'Team E'],
-        responsive: [{
-            breakpoint: 480,
-            options: {
-                chart: {
-                    width: 200
-                },
-                legend: {
-                    position: 'bottom'
-                }
+    $(document).ready(function () {
+        $("#datepicker1").datepicker();
+        $("#datepicker2").datepicker();
+        axios({
+            method: 'GET',
+            url: '/report/getdata',
+            data: {
+                a: 1
             }
-        }]
-    };
+        }).then(res => {
+            let options = {
+                series: [{
+                    name: 'Inflation',
+                    data: res.data.data_money,
+                }],
+                chart: {
+                    height: 350,
+                    type: 'bar',
+                },
+                plotOptions: {
+                    bar: {
+                        borderRadius: 10,
+                        dataLabels: {
+                            position: 'top', // top, center, bottom
+                        },
+                    }
+                },
+                dataLabels: {
+                    enabled: true,
+                    formatter: function (val) {
+                        return val + "%";
+                    },
+                    offsetY: -20,
+                    style: {
+                        fontSize: '12px',
+                        colors: ["#304758"]
+                    }
+                },
 
-    var chart = new ApexCharts(document.querySelector("#chart"), options);
-    chart.render();
+                xaxis: {
+                    categories: res.data.days7,
+                    position: 'top',
+                    axisBorder: {
+                        show: false
+                    },
+                    axisTicks: {
+                        show: false
+                    },
+                    crosshairs: {
+                        fill: {
+                            type: 'gradient',
+                            gradient: {
+                                colorFrom: '#D8E3F0',
+                                colorTo: '#BED1E6',
+                                stops: [0, 100],
+                                opacityFrom: 0.4,
+                                opacityTo: 0.5,
+                            }
+                        }
+                    },
+                    tooltip: {
+                        enabled: true,
+                    }
+                },
+                yaxis: {
+                    axisBorder: {
+                        show: false
+                    },
+                    axisTicks: {
+                        show: false,
+                    },
+                    labels: {
+                        show: false,
+                        formatter: function (val) {
+                            return val;
+                        }
+                    }
+
+                },
+                title: {
+                    text: 'Doanh thu 7 ngày gần nhất',
+                    floating: true,
+                    offsetY: 330,
+                    align: 'center',
+                    style: {
+                        color: '#444'
+                    }
+                }
+            };
+
+            let chart = new ApexCharts(document.querySelector("#chart1"), options);
+            chart.render();
+
+
+        })
+    })
+
+    function test() {
+        let date1=document.getElementById("datepicker1").value;
+        let date2=document.getElementById("datepicker2").value;
+        axios({
+            method: 'POST',
+            url: '/report/getdata',
+            data: {
+                date_start: date1,
+                date_end: date2,
+            }
+        }).then(res => {
+            let lb = [];
+            let count = [];
+            for (let i = 0; i < res.data.data_type.length; i++) {
+                lb.push(res.data.data_type[i].displayname);
+                count.push(res.data.data_count[i]);
+            }
+            let options = {
+                series: count,
+                chart: {
+                    width: 380,
+                    type: 'pie',
+                },
+                labels: lb,
+                responsive: [{
+                    breakpoint: 480,
+                    options: {
+                        chart: {
+                            width: 200
+                        },
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }]
+            };
+            let chart = new ApexCharts(document.querySelector("#chart"), options);
+            chart.render();
+        }
+        )
+    }
 </script>
