@@ -3,23 +3,46 @@
 <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
 <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>
 <div class="container">
+    
     <div class="row">
 
-        <div class="col-6">
+        <div class="col-4">
             <p>Ngày bắt đầu: <input type="text" id="datepicker1"></p>
 
         </div>
-        <div class="col-6">
+        <div class="col-4">
             <p>Ngày kết thúc: <input type="text" id="datepicker2"></p>
 
         </div>
+        <div class="col-4">
+            <button onclick="test()" class="btn btn-primary">Xác nhận</button>
+        </div>
     </div>
-    <button onclick="test()" class="btn btn-primary">Xác nhận</button>
+     <div class="row">
+        <div class="col-12" id="chart"></div>
+    </div>
+
     <div class="row">
-        <div class="col-6" id="chart"></div>
-        <div class="col-6" id="chart1"></div>
+        <div class="col-12" id="chart1"></div>
+
     </div>
-    <div class="row"></div>
+
+    <div class="row">
+        <table class="table table-centered mb-0">
+            <thead>
+                <tr>
+                    <th>Ngày</th>
+                    <th>Số order</th>
+                    <th>Tổng tiền</th>
+                </tr>
+            </thead>
+            <tbody id="add">
+
+            </tbody>
+        </table>
+    </div>
+    <div class="row" id="total" ></div>
+   
 </div>
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
@@ -54,7 +77,7 @@
                 dataLabels: {
                     enabled: true,
                     formatter: function (val) {
-                        return val + "%";
+                        return val;
                     },
                     offsetY: -20,
                     style: {
@@ -104,7 +127,7 @@
 
                 },
                 title: {
-                    text: 'Doanh thu 7 ngày gần nhất',
+                    text: 'Doanh thu 30 ngày gần nhất',
                     floating: true,
                     offsetY: 330,
                     align: 'center',
@@ -116,14 +139,28 @@
 
             let chart = new ApexCharts(document.querySelector("#chart1"), options);
             chart.render();
-
-
+            let table = '';
+            let tongtien=0;
+            let tongorder=0;
+            for (let i = 0; i < res.data.data_money.length; i++) {
+                table = table + '<tr>'
+                    + '<td>' + res.data.days7[i] + '</td>'
+                    + '<td>' + res.data.order_count[i] + '</td>'
+                    + '<td>' + res.data.data_money[i] + '</td>'
+                    + '</tr>'
+                tongtien=  tongtien +  Number(res.data.data_money[i]);
+                tongorder = tongorder + Number(res.data.order_count[i]);
+            }
+            $('#add').append(table);
+            let k = '<p>' + 'Tổng tiền: ' + tongtien + '</p>' + 
+                    '<p>' + 'Tổng order: ' + tongorder + '</p>' 
+            $('#total').append(k);
         })
     })
 
     function test() {
-        let date1=document.getElementById("datepicker1").value;
-        let date2=document.getElementById("datepicker2").value;
+        let date1 = document.getElementById("datepicker1").value;
+        let date2 = document.getElementById("datepicker2").value;
         axios({
             method: 'POST',
             url: '/report/getdata',
@@ -149,7 +186,7 @@
                     breakpoint: 480,
                     options: {
                         chart: {
-                            width: 200
+                            width: 380
                         },
                         legend: {
                             position: 'bottom'

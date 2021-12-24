@@ -10,9 +10,10 @@ class reportController {
     async dayyyy(req,res){
         let days7=[];
         let data_money=[];
+        let order_count=[];
         let a = new Date();
         a = a.getFullYear() + '-' + (a.getMonth() + 1) + '-' + a.getDate();
-        for (let i=6; i>=0; i--){
+        for (let i=29; i>=0; i--){
             let date_now = new Date(a);
             let date_7= new Date(date_now);
             date_7.setDate(date_7.getDate() - i);
@@ -21,17 +22,18 @@ class reportController {
             let data=[];
             data  = await invoice.find({ createAt: { $gte: date_7, $lte: datee } }).
             sort({ createAt: 1 });
-            let ngay=  date_7.getDate()+ '-'  +  (date_7.getMonth() + 1); 
+            let ngay=  date_7.getDate()+ '/'  +  (date_7.getMonth() + 1); 
             let tg=0;
             for (let j=0; j<data.length; j++){
                 tg=tg+data[j].total_payment;
             }
+            order_count.push(data.length);
             days7.push(ngay);
             data_money.push(tg);
         }
         console.log(days7);
         console.log(data_money);
-        res.json({days7: days7, data_money: data_money});
+        res.json({days7: days7, data_money: data_money, order_count: order_count});
     }
     async getdata(req, res) {
         let data = [];
